@@ -80,6 +80,7 @@ public:
 		skinnedMeshRenderer.skinnedMeshLookup[skinnedMeshRenderer.skinnedMeshesToDraw.back().entityID]
 			= &skinnedMeshRenderer.skinnedMeshesToDraw.back();
 	};
+	inline void gm_PushParticleData( particleRenderer);
 
 	//Accessors
 	inline const FrameBuffer& gm_GetEditorBuffer() const { return framebufferManager.editorBuffer; };
@@ -116,6 +117,7 @@ private:
 	LightRenderer lightRenderer;
 	DebugRenderer debugRenderer;
 	CubeRenderer cubeRenderer;
+	ParticleRenderer particleRenderer;
 	//Managers
 	ShaderManager shaderManager;
 	FramebufferManager framebufferManager;

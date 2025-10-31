@@ -81,3 +81,4 @@ struct DebugFrustum : BasicMesh {
 	void CreateMesh();
 	void DrawMesh();
 };
+

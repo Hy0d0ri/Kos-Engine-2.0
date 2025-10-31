@@ -162,7 +162,6 @@ void TextRenderer::RenderScreenFonts(const CameraData& camera, Shader& shader)
 
 void TextRenderer::Clear()
 {
-	///std::cout << "CLEARING DATA\n";
 	screenTextToDraw.clear();
 }
 
@@ -421,4 +420,64 @@ void DebugRenderer::RenderDebugCubes(const CameraData& camera, Shader& shader)
 
 void DebugRenderer::Clear() {
 	basicDebugCubes.clear();
+}
+
+void ParticleRenderer::InitializeParticleRendererMeshes()
+{
+	// Quad vertex data (triangle strip)
+	static const float quadVertices[] = {
+		//  X,     Y,    Z
+		-0.5f, -0.5f, 0.0f,
+		 0.5f, -0.5f, 0.0f,
+		-0.5f,  0.5f, 0.0f,
+		 0.5f,  0.5f, 0.0f
+	};
+
+	GLuint quadVBO;
+	glGenVertexArrays(1, &basicParticleMesh.vaoid);
+	glGenBuffers(1, &quadVBO);
+	glGenBuffers(1, &basicParticleMesh.vboid);
+
+	glBindVertexArray(basicParticleMesh.vaoid);
+	// Set up base vertex buffer (quad geometry)
+	glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), quadVertices, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, basicParticleMesh.vboid);
+
+	GLsizei stride = sizeof(BasicParticleInstance);
+
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(BasicParticleInstance, position));
+
+	glEnableVertexAttribArray(3);
+	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(BasicParticleInstance, scale));
+
+	glEnableVertexAttribArray(4);
+	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(BasicParticleInstance, color));
+
+	glEnableVertexAttribArray(5);
+	glVertexAttribPointer(5, 1, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(BasicParticleInstance, rotation));
+
+	// Tell OpenGL this is per-instance data
+	glVertexAttribDivisor(2, 1);
+	glVertexAttribDivisor(3, 1);
+	glVertexAttribDivisor(4, 1);
+	glVertexAttribDivisor(5, 1);
+
+}
+
+void ParticleRenderer::Render(const CameraData& camera, Shader& shader)
+{
+	shader.Use();
+	if (!instancedBasicParticles.empty())
+	{
+		glBindVertexArray(basicParticleMesh.vaoid);
+		glBindBuffer(GL_ARRAY_BUFFER, basicParticleMesh.vboid);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, instancedBasicParticles.size() * sizeof(BasicParticleInstance), instancedBasicParticles.data());
+		glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, instancedBasicParticles.size());
+	}
+		
 }
