@@ -80,7 +80,7 @@ public:
 		skinnedMeshRenderer.skinnedMeshLookup[skinnedMeshRenderer.skinnedMeshesToDraw.back().entityID]
 			= &skinnedMeshRenderer.skinnedMeshesToDraw.back();
 	};
-	inline void gm_PushParticleData( particleRenderer);
+	//inline void gm_PushParticleData( particleRenderer);
 
 	//Accessors
 	inline const FrameBuffer& gm_GetEditorBuffer() const { return framebufferManager.editorBuffer; };

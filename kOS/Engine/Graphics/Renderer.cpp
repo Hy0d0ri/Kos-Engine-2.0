@@ -481,3 +481,9 @@ void ParticleRenderer::Render(const CameraData& camera, Shader& shader)
 	}
 		
 }
+
+void ParticleRenderer::Clear()
+{
+	instancedBasicParticles.clear();
+	particlesToDraw.clear();
+}
