@@ -79,7 +79,9 @@
             "cutOff": 5.5,
             "outerCutOff": 10.5,
             "intesnity": 1.0,
-            "shadowCast": false
+            "shadowCast": false,
+            "bakedLighting": false,
+            "depthMapGUID": "00000000-0000-0000-0000-000000000000"
         },
         "NameComponent": {
             "entityName": "test light",
