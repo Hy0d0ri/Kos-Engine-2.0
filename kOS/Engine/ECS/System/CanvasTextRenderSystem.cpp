@@ -62,7 +62,7 @@ namespace ecs {
                 {
                     TextComponent* textComp = ecs->GetComponent<TextComponent>(childID);
                     TransformComponent* childTransform = ecs->GetComponent<TransformComponent>(childID);
-                    if (!textComp->fontGUID.empty())
+                    if (!textComp->fontGUID.Empty())
                     {
                         std::shared_ptr<R_Font> fontResource = rm->GetResource<R_Font>(textComp->fontGUID);
                         gm->gm_PushScreenTextData(ScreenTextData{ childTransform->WorldTransformation.position,

@@ -83,7 +83,7 @@ struct DeepCopyComponents {
             dest.ApplyFunctionPairwise(*this, source); // recurse into reflected fields
         }
         else {
-            dest = source; // fallback copy
+            dest = source; // fallback shallow copy
         }
         count++;
     }

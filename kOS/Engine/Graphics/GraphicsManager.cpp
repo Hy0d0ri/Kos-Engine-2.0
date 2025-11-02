@@ -446,7 +446,7 @@ void GraphicsManager::gm_RenderDeferredObjects(const CameraData& camera)
 
 	//Fill point shadow stuff
 	for (int i = 0; i < lightRenderer.pointLightsToDraw.size(); i++) {
-		if (lightRenderer.pointLightsToDraw[i].bakedCon&& lightRenderer.pointLightsToDraw[i].bakedmapGUID.size()) {
+		if (lightRenderer.pointLightsToDraw[i].bakedCon&& !lightRenderer.pointLightsToDraw[i].bakedmapGUID.Empty()) {
 			std::shared_ptr<R_DepthMapCube> dmc = ResourceManager::GetInstance()->GetResource<R_DepthMapCube>(lightRenderer.pointLightsToDraw[i].bakedmapGUID);
 			glActiveTexture(GL_TEXTURE7 + i);
 			glBindTexture(GL_TEXTURE_CUBE_MAP, dmc->dcm.RetrieveID());

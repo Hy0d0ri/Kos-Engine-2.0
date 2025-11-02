@@ -39,7 +39,7 @@ namespace hierachy {
 		// Recalculate Local Transform after parenting
 		if (updateTransform) {
 			childTransform->localTransform = glm::inverse(parentTransform->transformation) * childTransform->transformation;
-			math::DecomposeMtxIntoTRS(childTransform->localTransform, childTransform->LocalTransformation.position, childTransform->LocalTransformation.rotation, childTransform->LocalTransformation.scale);
+			utility::DecomposeMtxIntoTRS(childTransform->localTransform, childTransform->LocalTransformation.position, childTransform->LocalTransformation.rotation, childTransform->LocalTransformation.scale);
 		}
 	}
 
@@ -68,7 +68,7 @@ namespace hierachy {
 		childTransform->m_parentID = 0;
 		// Updating Transformation Mtxs
 		childTransform->localTransform = childTransform->transformation;
-		math::DecomposeMtxIntoTRS(childTransform->localTransform, childTransform->LocalTransformation.position, childTransform->LocalTransformation.rotation, childTransform->LocalTransformation.scale);
+		utility::DecomposeMtxIntoTRS(childTransform->localTransform, childTransform->LocalTransformation.position, childTransform->LocalTransformation.rotation, childTransform->LocalTransformation.scale);
 	}
 
 	std::optional<EntityID> GetParent(EntityID child)
