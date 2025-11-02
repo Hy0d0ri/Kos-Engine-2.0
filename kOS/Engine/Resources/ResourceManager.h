@@ -27,6 +27,7 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 #include "Resources/R_Animation.h"
 #include "Resources/R_Audio.h"
 #include "Resources/R_Material.h"
+#include "Resources/R_DepthMapCube.h"
 class ResourceManager {
 
 public:
@@ -39,17 +40,19 @@ public:
 		RegisterResourceType<R_Animation>(".ani");
 		RegisterResourceType<R_Audio>(".wav");
 		RegisterResourceType<R_Material>(".mat");
+		RegisterResourceType<R_DepthMapCube>(".dcm");
+		RegisterResourceType<R_DepthMapCube>(".prefab");
         //Wait for texture type
     }
 
 	~ResourceManager() = default;
 
-    static std::shared_ptr<ResourceManager> GetInstance() {
+    static ResourceManager* GetInstance() {
         if (!m_instancePtr)
         {
             m_instancePtr = std::make_shared<ResourceManager>();
         }
-        return m_instancePtr;
+        return m_instancePtr.get();
     }
 
 	void Init(const std::string& Directory) {

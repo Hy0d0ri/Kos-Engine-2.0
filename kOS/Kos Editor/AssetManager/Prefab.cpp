@@ -24,7 +24,8 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 #include "ECS/Hierachy.h"
 #include "ECS/ECS.h"
 #include "Scene/SceneManager.h"
-#include "../Kos Editor/AssetManager/AssetManager.h" // Double check if Jaz wants to do complete seperation of editor and engine
+#include "AssetManager/AssetManager.h" // Double check if Jaz wants to do complete seperation of editor and engine
+#include "Config/ComponentRegistry.h"
 #include <RAPIDJSON/filewritestream.h>
 #include <RAPIDJSON/prettywriter.h>
 #include <RAPIDJSON/writer.h>
@@ -36,7 +37,7 @@ namespace prefab
         const auto& vecChild = hierachy::m_GetChild(parentid);
         if (!vecChild.has_value()) return;
         for (auto& childid : vecChild.value()) {
-            ecs::ECS* ecs = ecs::ECS::GetInstance();
+            ecs::ECS* ecs =ComponentRegistry::GetECSInstance();
             ecs::NameComponent* nc = ecs->GetComponent<ecs::NameComponent>(childid);
             nc->isPrefab = true;
             nc->prefabName = scenename;
@@ -56,7 +57,7 @@ namespace prefab
         }
 
         //check if prefabscene exist
-        ecs::ECS* ecs = ecs::ECS::GetInstance();
+        ecs::ECS* ecs =ComponentRegistry::GetECSInstance();
 
         if (insertscene.empty()) {
             for (auto& scene : ecs->sceneMap) {
@@ -98,7 +99,7 @@ namespace prefab
 
     void m_SaveEntitytoPrefab(ecs::EntityID id)
     {
-        ecs::ECS* ecs = ecs::ECS::GetInstance();
+        ecs::ECS* ecs =ComponentRegistry::GetECSInstance();
         ecs::NameComponent* nc = ecs->GetComponent<ecs::NameComponent>(id);
         std::string m_jsonFilePath{ AssetManager::GetInstance()->GetAssetManagerDirectory() + "/Prefabs/" }; //TODO allow drag and drop onto content browser
         std::string filename;
@@ -156,7 +157,7 @@ namespace prefab
     }
 
     void OverwriteScenePrefab(ecs::EntityID id) {
-        ecs::ECS* ecs = ecs::ECS::GetInstance();
+        ecs::ECS* ecs =ComponentRegistry::GetECSInstance();
         ecs::NameComponent* nc = ecs->GetComponent<ecs::NameComponent>(id);
         if (!nc->isPrefab) return;
 
@@ -172,7 +173,7 @@ namespace prefab
     }
 
     void UpdateAllPrefab(const std::string& prefabSceneName) {
-        ecs::ECS* ecs = ecs::ECS::GetInstance();
+        ecs::ECS* ecs =ComponentRegistry::GetECSInstance();
         if (ecs->sceneMap.find(prefabSceneName) == ecs->sceneMap.end()) return;
         const auto& prefabData = ecs->sceneMap.find(prefabSceneName);
 
@@ -189,7 +190,7 @@ namespace prefab
 
  
     void DeepUpdatePrefab(ecs::EntityID idA, ecs::EntityID idB) {
-        ecs::ECS* ecs = ecs::ECS::GetInstance();
+        ecs::ECS* ecs =ComponentRegistry::GetECSInstance();
         if (idA == idB)return;
 
         const auto signatureA = ecs->GetEntitySignature(idA);
@@ -285,7 +286,7 @@ namespace prefab
 
 
     void OverwritePrefab_Component(ecs::EntityID entityID, const std::string& componentName, const std::string& prefabSceneName) {
-        ecs::ECS* ecs = ecs::ECS::GetInstance();
+        ecs::ECS* ecs =ComponentRegistry::GetECSInstance();
         if (ecs->sceneMap.find(prefabSceneName) == ecs->sceneMap.end()) return;
         auto iter = ecs->sceneMap.find(prefabSceneName);
         if (iter == ecs->sceneMap.end()) return;
@@ -310,7 +311,7 @@ namespace prefab
     }
 
     void RevertToPrefab_Component(ecs::EntityID entityID, const std::string& componentName, const std::string& prefabSceneName) {
-        ecs::ECS* ecs = ecs::ECS::GetInstance();
+        ecs::ECS* ecs =ComponentRegistry::GetECSInstance();
 
         if (ecs->sceneMap.find(prefabSceneName) == ecs->sceneMap.end()) return;
         auto iter = ecs->sceneMap.find(prefabSceneName);
@@ -324,7 +325,7 @@ namespace prefab
 
     void LoadPrefab(const std::filesystem::path& filepath) {
         auto* sm = scenes::SceneManager::m_GetInstance();
-        ecs::ECS* ecs = ecs::ECS::GetInstance();
+        ecs::ECS* ecs =ComponentRegistry::GetECSInstance();
 
         auto scenename = filepath.filename();
 
@@ -348,7 +349,7 @@ namespace prefab
 
     void LoadAllPrefabs() {
         
-        ecs::ECS* ecs = ecs::ECS::GetInstance();
+        ecs::ECS* ecs =ComponentRegistry::GetECSInstance();
 
         std::string prefabPath = AssetManager::GetInstance()->GetAssetManagerDirectory() + "/Prefabs/"; // Should have a better way to get file directories
         if (!std::filesystem::exists(prefabPath))return;
@@ -365,7 +366,7 @@ namespace prefab
     }
 
     ecs::ComponentSignature ComparePrefabWithInstance(ecs::EntityID entityID) {
-        ecs::ECS* ecs = ecs::ECS::GetInstance();
+        ecs::ECS* ecs =ComponentRegistry::GetECSInstance();
         std::string prefabName = ecs->GetComponent<ecs::NameComponent>(entityID)->prefabName;
         if (ecs->sceneMap.find(prefabName) == ecs->sceneMap.end()) return ecs::ComponentSignature();
 
@@ -404,7 +405,7 @@ namespace prefab
     }
 
     void RefreshComponentDifferenceList(std::vector<std::string>& diffComp, ecs::EntityID entityID) {
-        ecs::ECS* m_ecs = ecs::ECS::GetInstance();
+        ecs::ECS* m_ecs =ComponentRegistry::GetECSInstance();
         ecs::ComponentSignature sig = ComparePrefabWithInstance(entityID);
         diffComp.clear();
         const auto& componentKey = m_ecs->GetComponentKeyData();

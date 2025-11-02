@@ -34,6 +34,14 @@ struct SceneCompiler {
 	REFLECTABLE(SceneCompiler, path, outputExtension, inputExtensions);
 
 };
+struct PrefabCompiler {
+	std::string type = R_Prefab::classname();
+	std::string path;
+	std::string outputExtension;
+	std::vector<std::string> inputExtensions;
+	REFLECTABLE(SceneCompiler, path, outputExtension, inputExtensions);
+
+};
 
 struct AudioCompiler {
 	std::string type = R_Audio::classname();
@@ -51,16 +59,24 @@ struct MaterialCompiler {
 	REFLECTABLE(R_Material, path, outputExtension, inputExtensions);
 
 };
+struct DepthMapCubeCompiler {
+	std::string type = R_DepthMapCube::classname();
+	std::string path;
+	std::string outputExtension;
+	std::vector<std::string> inputExtensions;
+	REFLECTABLE(R_DepthMapCube, path, outputExtension, inputExtensions);
 
+};
 struct CompilerData {
 	MeshCompiler meshCompiler;
 	TextureCompiler textureCompiler;
 	FontCompiler fontCompiler;
 	SceneCompiler sceneCompiler;
+	PrefabCompiler prefabCompiler;
 	AudioCompiler audioCompiler;
 	MaterialCompiler materialCompiler;
-
-	REFLECTABLE(CompilerData, meshCompiler,textureCompiler, fontCompiler, sceneCompiler, audioCompiler, materialCompiler);
+	DepthMapCubeCompiler dmcCompiler;
+	REFLECTABLE(CompilerData, meshCompiler,textureCompiler, fontCompiler, sceneCompiler, prefabCompiler, audioCompiler, materialCompiler, dmcCompiler);
 };
 
 

@@ -8,6 +8,7 @@
 #include "Reflection/Field.h"
 #include "Scene/SceneManager.h"
 
+
 //ECS Varaible
 
 namespace ecs{
@@ -40,6 +41,7 @@ namespace ecs{
 		//RegisterComponent<ScriptComponent>();
 		RegisterComponent<OctreeGeneratorComponent>();
 		RegisterComponent<CubeRendererComponent>();
+		RegisterComponent<ParticleComponent>();
 
 		//Allocate memory to each system
 		RegisterSystem<ScriptingSystem>(RUNNING);
@@ -60,7 +62,8 @@ namespace ecs{
 		RegisterSystem<DebugBoxColliderRenderSystem, TransformComponent, BoxColliderComponent>();
 		RegisterSystem<AudioSystem, TransformComponent, AudioComponent>();
 		RegisterSystem<PathfindingSystem, TransformComponent, OctreeGeneratorComponent>();
-		
+		RegisterSystem<ParticleSystem, TransformComponent, ParticleComponent>();
+
 
 	}
 
