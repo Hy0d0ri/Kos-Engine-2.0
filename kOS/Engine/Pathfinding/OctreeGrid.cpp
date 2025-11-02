@@ -30,14 +30,6 @@ namespace Octrees {
 		CalculateBounds();
 		CreateTree(minNodeSize);
 		GetEmptyLeaves(&root);
-		//for (Edge edge : graph.edges) {
-		//	std::cout << "EDGE2: from " << edge.a->octreeNode.bounds.center.x << ", "
-		//		<< edge.a->octreeNode.bounds.center.y << ", "
-		//		<< edge.a->octreeNode.bounds.center.z << "   to   "
-		//		<< edge.b->octreeNode.bounds.center.x << ", "
-		//		<< edge.b->octreeNode.bounds.center.y << ", "
-		//		<< edge.b->octreeNode.bounds.center.z << std::endl;
-		//}
 
 		GetEdges();
 	}
@@ -54,10 +46,7 @@ namespace Octrees {
 			return;
 		}
 
-		//std::cout << "CHILD SIZE: " << node->children.size() << " NODE ID: " << node->id << std::endl;
-
 		for (OctreeNode& child : node->children) {
-			//std::cout << "NODE ID BEING CHECKED: " << child.id << std::endl;
 			GetEmptyLeaves(&child);
 		}
 
@@ -66,13 +55,6 @@ namespace Octrees {
 				if (i == j)
 					continue;
 
-				//std::cout << "EDGE1: " << node->children[i].bounds.center.x << ", "
-				//	<< node->children[i].bounds.center.y << ", "
-				//	<< node->children[i].bounds.center.z << " to "
-				//	<< node->children[j].bounds.center.x << ", "
-				//	<< node->children[j].bounds.center.y << ", "
-				//	<< node->children[j].bounds.center.z << std::endl;
-				//std::cout << "Infinite? " << i << std::endl;
 				graph.AddEdge(&node->children[i], &node->children[j]);
 			}
 		}
@@ -108,9 +90,6 @@ namespace Octrees {
 			if (!boxCollider || !transform)
 				continue;
 
-			//std::cout << "OBJECT MIN: " << boxCollider->box.bounds.min.x << ", " << boxCollider->box.bounds.min.y << ", " << boxCollider->box.bounds.min.z << std::endl;
-			//std::cout << "OBJECT MAX: " << boxCollider->box.bounds.max.x << ", " << boxCollider->box.bounds.max.y << ", " << boxCollider->box.bounds.max.z << std::endl;
-
 			if (boxCollider->box.bounds.min.x + transform->WorldTransformation.position.x < minBound.x) {
 				minBound.x = boxCollider->box.bounds.min.x + transform->WorldTransformation.position.x;
 			}
@@ -129,8 +108,6 @@ namespace Octrees {
 			if (boxCollider->box.bounds.max.z + transform->WorldTransformation.position.z > maxBound.z) {
 				maxBound.z = boxCollider->box.bounds.max.z + transform->WorldTransformation.position.z;
 			}
-
-			//bounds.rotation = transform->LocalTransformation.rotation;
 		}
 
 		boundCenter.x = (minBound.x + maxBound.x) / 2.f;

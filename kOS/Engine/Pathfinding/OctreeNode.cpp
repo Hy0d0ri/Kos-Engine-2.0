@@ -108,6 +108,7 @@ namespace Octrees {
 		BasicDebugData basicDebug;
 		//basicDebug.color = { 1.f, 0.f, 0.f };
 		basicDebug.worldTransform = model;
+		basicDebug.color = { 1.f, 0.f, 0.f };
 		gm->gm_PushCubeDebugData(BasicDebugData{ basicDebug });
 
 		if (!children.empty()) {

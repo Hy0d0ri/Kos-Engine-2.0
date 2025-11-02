@@ -46,6 +46,8 @@ public:
 			// First Person Camera
 			// THIS IS SUPER CURSED FOR NOW I SWEAR -> HARDCODING THE CAMERA TO BE FIRST CHILD
 			if (auto* cc = ecsPtr->GetComponent<ecs::CameraComponent>(ecsPtr->GetComponent<ecs::TransformComponent>(entity)->m_childID[0])) {				
+				//std::cout << "CAMERA EXISTS\n";
+				
 				float mouseRotationX = Input->GetAxisRaw("Mouse Y") * playerCameraSpeedX;
 				float mouseRotationY = Input->GetAxisRaw("Mouse X") * playerCameraSpeedY;
 				rotationX += mouseRotationX;
@@ -53,6 +55,7 @@ public:
 				rotationX = glm::clamp(rotationX, -90.f, 90.f);
 				auto* cameraTransform = ecsPtr->GetComponent<ecs::TransformComponent>(ecsPtr->GetComponent<ecs::TransformComponent>(entity)->m_childID[0]);
 				cameraTransform->LocalTransformation.rotation = glm::vec3(rotationX, rotationY + 90.f, 0.f);
+				//std::cout << "CAMERA: " << cameraTransform->LocalTransformation.rotation.x << ", " << cameraTransform->LocalTransformation.rotation.y << std::endl;
 				tc->LocalTransformation.rotation = glm::vec3(0.f, -rotationY, 0.f);
 			}
 

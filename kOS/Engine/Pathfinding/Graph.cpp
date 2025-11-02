@@ -84,9 +84,9 @@ namespace Octrees {
 	const int maxIterations = 1000;
 
 	bool Graph::AStar(OctreeNode* startNode, OctreeNode* endNode) {
-		std::cout << "RUNNING PATHFINDING\n";
-		std::cout << "Pathfind Start: " << startNode->bounds.center.x << ", " << startNode->bounds.center.y << ", " << startNode->bounds.center.z << std::endl;
-		std::cout << "Pathfind End: " << endNode->bounds.center.x << ", " << endNode->bounds.center.y << ", " << endNode->bounds.center.z << std::endl;
+		//std::cout << "RUNNING PATHFINDING\n";
+		//std::cout << "Pathfind Start: " << startNode->bounds.center.x << ", " << startNode->bounds.center.y << ", " << startNode->bounds.center.z << std::endl;
+		//std::cout << "Pathfind End: " << endNode->bounds.center.x << ", " << endNode->bounds.center.y << ", " << endNode->bounds.center.z << std::endl;
 
 		// Reset path list at the start whenever trying to evaluate another path.
 		pathList.clear();
@@ -118,7 +118,7 @@ namespace Octrees {
 
 			// Max iterations reached, abort algorithm.
 			if (++iterationCount > maxIterations) {
-				std::cout << "NO PATH FOUND1\n";
+				//std::cout << "NO PATH FOUND1\n";
 				return false;
 			}
 
@@ -134,7 +134,7 @@ namespace Octrees {
 
 			// If current node is the end node, path is found.
 			if (current == end) {
-				std::cout << "PATH IS FOUND\n";
+				//std::cout << "PATH IS FOUND\n";
 				ReconstructPath(current);
 				return true;
 			}
@@ -177,14 +177,14 @@ namespace Octrees {
 			}
 		}
 
-		std::cout << "NO PATH FOUND2\n";
+		//std::cout << "NO PATH FOUND2\n";
 		return false;
 	}
 
 	bool Graph::AStarGround(OctreeNode* startNode, OctreeNode* endNode) {
-		std::cout << "RUNNING GROUND PATHFINDING\n";
-		std::cout << "Pathfind Ground Start: " << startNode->bounds.center.x << ", " << startNode->bounds.center.y << ", " << startNode->bounds.center.z << std::endl;
-		std::cout << "Pathfind Ground End: " << endNode->bounds.center.x << ", " << endNode->bounds.center.y << ", " << endNode->bounds.center.z << std::endl;
+		//std::cout << "RUNNING GROUND PATHFINDING\n";
+		//std::cout << "Pathfind Ground Start: " << startNode->bounds.center.x << ", " << startNode->bounds.center.y << ", " << startNode->bounds.center.z << std::endl;
+		//std::cout << "Pathfind Ground End: " << endNode->bounds.center.x << ", " << endNode->bounds.center.y << ", " << endNode->bounds.center.z << std::endl;
 
 		// Reset path list at the start whenever trying to evaluate another path.
 		pathList.clear();
@@ -214,7 +214,7 @@ namespace Octrees {
 		while (openSet.size()) {
 			// Max iterations reached, abort algorithm.
 			if (++iterationCount > maxIterations) {
-				std::cout << "NO PATH FOUND1\n";
+				//std::cout << "NO PATH FOUND1\n";
 				return false;
 			}
 
@@ -230,7 +230,7 @@ namespace Octrees {
 
 			// If current node is the end node, path is found.
 			if (current == end) {
-				std::cout << "PATH IS FOUND\n";
+				//std::cout << "PATH IS FOUND\n";
 				ReconstructPath(current);
 				return true;
 			}
@@ -266,7 +266,7 @@ namespace Octrees {
 			}
 		}
 
-		std::cout << "NO PATH FOUND2\n";
+		//std::cout << "NO PATH FOUND2\n";
 		return false;
 	}
 
