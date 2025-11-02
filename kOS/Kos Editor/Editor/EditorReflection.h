@@ -208,20 +208,49 @@ struct DrawComponents {
             _args = buffer;
         }
 
-        count++;
-
-		if (ImGui::BeginDragDropTarget()) {
+        if (ImGui::BeginDragDropTarget()) {
             if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("file")) {
                 IM_ASSERT(payload->DataSize == sizeof(AssetPathGUID));
                 const AssetPathGUID* data = static_cast<const AssetPathGUID*>(payload->Data);
 
-                if (std::strlen(data->GUID) == 0)
-                    _args = data->path;
-                else
-                    _args = data->GUID;
+                _args = data->path;
+
             }
-			ImGui::EndDragDropTarget();
-		}
+            ImGui::EndDragDropTarget();
+        }
+
+        count++;
+    }
+
+    void operator()(utility::GUID& _args) {
+        ImGui::Text(m_Array[count].c_str());
+        ImGui::SameLine(sameLineParam);
+        std::string title = "##" + m_Array[count];
+
+
+        static char buffer[256];
+        std::strncpy(buffer, _args.GetToString().c_str(), sizeof(buffer));
+        buffer[sizeof(buffer) - 1] = '\0';
+
+        // InputText returns true only when Enter is pressed
+        ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
+        if (ImGui::InputText(title.c_str(), buffer, sizeof(buffer), ImGuiInputTextFlags_EnterReturnsTrue)) {
+            // Update your string only once
+            _args.SetFromString(buffer);
+        }
+
+        count++;
+
+        if (ImGui::BeginDragDropTarget()) {
+            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("file")) {
+                IM_ASSERT(payload->DataSize == sizeof(AssetPathGUID));
+                const AssetPathGUID* data = static_cast<const AssetPathGUID*>(payload->Data);
+
+                _args = data->GUID;
+                    
+            }
+            ImGui::EndDragDropTarget();
+        }
     }
 
     template <typename U>

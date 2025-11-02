@@ -62,7 +62,7 @@ namespace ecs {
                 {
                     SpriteComponent* spriteComp = ecs->GetComponent<SpriteComponent>(childID);
                     TransformComponent* childTransform = ecs->GetComponent<TransformComponent>(childID);
-                    if (!spriteComp->spriteGUID.empty())
+                    if (!spriteComp->spriteGUID.Empty())
                     {
                         std::shared_ptr<R_Texture> fontResource = rm->GetResource<R_Texture>(spriteComp->spriteGUID);
                         gm->gm_PushScreenSpriteData(ScreenSpriteData{ childTransform->WorldTransformation.position,
