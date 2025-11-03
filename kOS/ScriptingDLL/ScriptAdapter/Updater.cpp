@@ -53,6 +53,7 @@ extern "C"  __declspec(dllexport) void UpdateStatic(StaticVariableManager* svm) 
 	RegisterScript<FireAcidPowerupManagerScript>();
 	RegisterScript<LightningAcidPowerupManagerScript>();
 
+	RegisterScript<GroundCheckScript>();
 	RegisterScript<PlayerManagerScript>();
 	RegisterScript<GunScript>();
 

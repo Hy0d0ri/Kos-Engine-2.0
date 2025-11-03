@@ -4,7 +4,10 @@
 
 class FireAcidPowerupManagerScript : public TemplateSC {
 public:
-	int fireAcidDamage = 1;
+	int flamethrowerDamage = 1;
+	float lingerTime;
+
+	float currentTimer = 0.f;
 
 	void Start() override {
 		physicsPtr->OnTriggerEnter.Add([this](const physics::Collision& col) {
@@ -22,7 +25,13 @@ public:
 	}
 
 	void Update() override {
+		if (currentTimer <= lingerTime) {
+			currentTimer += ecsPtr->m_GetDeltaTime();
 
+			if (currentTimer >= lingerTime) {
+				ecsPtr->DeleteEntity(entity);
+			}
+		}
 	}
 
 
