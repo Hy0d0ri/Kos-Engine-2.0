@@ -8,12 +8,14 @@ public:
 	float bulletSpeed = 5.f;
 	glm::vec3 direction;
 
+	float timeBeforeDeath = 2.5f;
+	float currentTimer = 0.f;
+
 	void Start() override {
 		physicsPtr->GetEventCallback()->OnTriggerEnter.Add([this](const physics::Collision& col) {
 			//if (col.thisEntityID != this->entity) { return; }
 			if (ecsPtr->GetComponent<NameComponent>(col.otherEntityID)->entityTag == "Enemy") {
 				if (auto* enemyScript = ecsPtr->GetComponent<EnemyManagerScript>(col.otherEntityID)) {
-					std::cout << "HELLO\n";
 					enemyScript->enemyHealth -= bulletDamage;
 
 					if (enemyScript->enemyHealth <= 0) {
@@ -23,13 +25,20 @@ public:
 					//ecsPtr->DeleteEntity(entity);
 				}
 			}
-
 		});
 	}
 
 	void Update() override {
 		if (auto* tc = ecsPtr->GetComponent<ecs::TransformComponent>(entity)) {
 			tc->LocalTransformation.position += direction * bulletSpeed * ecsPtr->m_GetDeltaTime();
+		}
+
+		if (currentTimer < timeBeforeDeath) {
+			currentTimer += ecsPtr->m_GetDeltaTime();
+
+			if (currentTimer >= timeBeforeDeath) {
+				ecsPtr->DeleteEntity(entity);
+			}
 		}
 	}
 

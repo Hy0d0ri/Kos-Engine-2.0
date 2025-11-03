@@ -1482,8 +1482,8 @@
             "bulletPrefab": "66adf257-5e24-d6e6-4321-1cf241444414",
             "fireballPrefab": "a489a9c4-2ad1-24e0-9ad5-f1b1ef81e4b7",
             "lightningStrikePrefab": "ea36b838-cef9-7c8c-584a-29654652024a",
-            "groundSpikesPrefab": "0e0349c9-02d8-f6b8-df3c-f7f6943e81bf",
             "acidBlastPrefab": "df217809-aa63-539d-4bb6-d7ffde283b90",
+            "groundSpikesPrefab": "0e0349c9-02d8-f6b8-df3c-f7f6943e81bf",
             "starfallPrefab": "4c9702d6-127d-fc41-6704-bc63dc2b0998"
         },
         "RigidbodyComponent": {

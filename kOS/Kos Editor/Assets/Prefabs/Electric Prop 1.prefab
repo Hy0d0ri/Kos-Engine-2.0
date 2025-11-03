@@ -1,5 +1,11 @@
 [
     {
+        "SceneData": {
+            "skyBoxGUID": [],
+            "ambientIntensity": 1.0
+        }
+    },
+    {
         "entityGUID": "77c4e220-31ca-51d7-0e1c-06e725269946",
         "CapsuleColliderComponent": {
             "isTrigger": false,

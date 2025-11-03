@@ -145,6 +145,7 @@ public:
 
 				// Interact Inputs
 				if (Input->IsKeyTriggered(keys::E)) {
+					std::cout << "Pressing E\n";
 					RaycastHit hit;
 					hit.entityID = 9999999;
 
@@ -167,21 +168,17 @@ public:
 					//ecsPtr->GetComponent<BoxColliderComponent>(test)->isTrigger = true;
 					//ecsPtr->GetComponent<TransformComponent>(test)->LocalTransformation.position = cameraTransform->WorldTransformation.position + dir * 5.f;
 
-					std::cout << "HIT ID: " << hit.entityID << std::endl;
-
 					if (hit.entityID != 9999999 && ecsPtr->GetComponent<NameComponent>(hit.entityID)->entityTag == "Powerup") {
-						std::cout << "YES POWERUP\n";
 
 						if (auto* powerupComp = ecsPtr->GetComponent<PowerupManagerScript>(hit.entityID)) {
 							if (powerupComp->powerupType == "fire") {
-								std::cout << "FIRE\n";
 								if (currentPowerup == "lightning") {
 									currentPowerup = "firelightning";
 								}
 								else if (currentPowerup == "acid") {
 									currentPowerup = "fireacid";
 								}
-								else {
+								else if(currentPowerup == "none") {
 									currentPowerup = "fire";
 								}
 							}
@@ -192,7 +189,7 @@ public:
 								else if (currentPowerup == "acid") {
 									currentPowerup = "lightningacid";
 								}
-								else {
+								else if (currentPowerup == "none") {
 									currentPowerup = "lightning";
 								}
 							}
@@ -203,33 +200,35 @@ public:
 								else if (currentPowerup == "lightning") {
 									currentPowerup = "lightningacid";
 								}
-								else {
+								else if (currentPowerup == "none") {
 									currentPowerup = "acid";
 								}
 							}
+
+							std::cout << "CURRENT POWERUP: " << currentPowerup << std::endl;
 						}
 					}
 				}
 			}
 
 			// Shooting Inputs
-			//if (Input->IsKeyTriggered(keys::LMB)) {
-			//	std::shared_ptr<R_Scene> bullet = resource->GetResource<R_Scene>(bulletPrefab);
+			if (Input->IsKeyTriggered(keys::LMB)) {
+				std::shared_ptr<R_Scene> bullet = resource->GetResource<R_Scene>(bulletPrefab);
 
-			//	if (bullet) {
-			//		std::string currentScene = ecsPtr->GetSceneByEntityID(entity);
-			//		//ecs::EntityID bulletID = bullet->DuplicatePrefabIntoScene(currentScene);
-			//		ecs::EntityID bulletID = DuplicatePrefabIntoScene<R_Scene>(currentScene, bulletPrefab);
+				if (bullet) {
+					std::string currentScene = ecsPtr->GetSceneByEntityID(entity);
+					//ecs::EntityID bulletID = bullet->DuplicatePrefabIntoScene(currentScene);
+					ecs::EntityID bulletID = DuplicatePrefabIntoScene<R_Scene>(currentScene, bulletPrefab);
 
-			//		if (auto* bulletTransform = ecsPtr->GetComponent<TransformComponent>(bulletID)) {
-			//			bulletTransform->LocalTransformation.position = ecsPtr->GetComponent<TransformComponent>(creationPointID)->WorldTransformation.position;
-			//		}
+					if (auto* bulletTransform = ecsPtr->GetComponent<TransformComponent>(bulletID)) {
+						bulletTransform->LocalTransformation.position = ecsPtr->GetComponent<TransformComponent>(creationPointID)->WorldTransformation.position;
+					}
 
-			//		if (auto* bulletScript = ecsPtr->GetComponent<BulletLogic>(bulletID)) {
-			//			bulletScript->direction = GetCameraFacingDirection();
-			//		}
-			//	}
-			//}
+					if (auto* bulletScript = ecsPtr->GetComponent<BulletLogic>(bulletID)) {
+						bulletScript->direction = GetCameraFacingDirection();
+					}
+				}
+			}
 
 			// Powerup shooting
 			if (Input->IsKeyTriggered(keys::RMB)) {
@@ -322,7 +321,7 @@ public:
 						if (auto* flamethrowerTransform = ecsPtr->GetComponent<TransformComponent>(flamethrowerID)) {
 							flamethrowerTransform->LocalTransformation.position = ecsPtr->GetComponent<TransformComponent>(creationPointID)->WorldTransformation.position;
 							//flamethrowerTransform.
-							
+							ecsPtr->SetParent(creationPointID, flamethrowerID);
 						}
 
 						currentPowerup = "none";
@@ -384,5 +383,5 @@ public:
 
 	REFLECTABLE(PlayerManagerScript, playerHealth, playerMovementSpeed, playerCrouchingSpeed, playerJumpForce, playerCameraSpeedX,
 		playerCameraSpeedY, creationPoint, cameraObject, armModel, groundCheck, bulletPrefab, fireballPrefab, lightningStrikePrefab,
-		groundSpikesPrefab, acidBlastPrefab, starfallPrefab);
+		acidBlastPrefab, groundSpikesPrefab, starfallPrefab);
 };

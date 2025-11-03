@@ -14,7 +14,7 @@ public:
 			//if (col.thisEntityID != this->entity) { return; }
 			if (ecsPtr->GetComponent<NameComponent>(col.otherEntityID)->entityTag == "Enemy") {
 				if (auto* enemyScript = ecsPtr->GetComponent<EnemyManagerScript>(col.otherEntityID)) {
-					enemyScript->enemyHealth -= 1;
+					enemyScript->enemyHealth -= flamethrowerDamage;
 
 					if (enemyScript->enemyHealth <= 0) {
 						//ecsPtr->DeleteEntity(col.otherEntityID);
