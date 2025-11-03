@@ -100,7 +100,7 @@ namespace gui
 
         gameWindowPos = ImGui::GetCursorScreenPos();
         gameWindowSize = ImGui::GetContentRegionAvail();
-
+   
         ImGui::End();
 	}
 }
