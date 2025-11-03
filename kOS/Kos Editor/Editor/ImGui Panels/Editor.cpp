@@ -227,7 +227,7 @@ namespace gui {
 				DrawInputWindow();
 				DrawContentBrowser();
 				DrawRenderScreenWindow(static_cast<unsigned int>(m_window.windowWidth), static_cast<unsigned int>(m_window.windowHeight));
-				DrawGameSceneWindow();
+				DrawGameSceneWindow(static_cast<unsigned int>(m_window.windowWidth), static_cast<unsigned int>(m_window.windowHeight));
 				DrawPerformanceWindow();
 				DrawPreferencesWindow();
 				DrawAnimationWindow();
