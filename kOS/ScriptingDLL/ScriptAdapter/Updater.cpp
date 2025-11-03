@@ -54,6 +54,7 @@ extern "C"  __declspec(dllexport) void UpdateStatic(StaticVariableManager* svm) 
 	RegisterScript<LightningAcidPowerupManagerScript>();
 
 	RegisterScript<PlayerManagerScript>();
+	RegisterScript<GunScript>();
 
 	FieldComponentTypeRegistry::CreateAllDrawers((static_cast<FieldSingleton*>(svm->field)->GetAction()));
 }
