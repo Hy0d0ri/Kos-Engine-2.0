@@ -18,5 +18,6 @@
 #include "ScriptingSystem.h"
 #include "PathfindingSystem.h"
 #include "CubeRenderSystem.h"
+#include "SphereRenderSystem.h"
 #include "PhysicsSystem.h"
 #include "ParticleSystem.h"

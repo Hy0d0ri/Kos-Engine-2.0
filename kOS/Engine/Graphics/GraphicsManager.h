@@ -70,6 +70,7 @@ public:
 	inline void gm_PushCapsuleDebugData(BasicDebugData&& data) { debugRenderer.basicDebugCapsules.emplace_back(std::move(data)); }
 	inline void gm_PushSphereDebugData(BasicDebugData&& data) { debugRenderer.basicDebugSpheres.emplace_back(std::move(data)); }
 	inline void gm_PushCubeData(CubeRenderer::CubeData&& data) { cubeRenderer.cubesToDraw.emplace_back(std::move(data)); };
+	inline void gm_PushSphereData(SphereRenderer::SphereData&& data) { sphereRenderer.spheresToDraw.emplace_back(std::move(data)); };
 	void gm_DrawMaterial(const PBRMaterial& md, FrameBuffer& fb);
 	inline void gm_PushSkinnedMeshData(SkinnedMeshData&& skinnedMeshData) {
 		skinnedMeshRenderer.skinnedMeshesToDraw.emplace_back(std::move(skinnedMeshData));
@@ -82,7 +83,7 @@ public:
 	inline const FrameBuffer& gm_GetEditorBuffer() const { return framebufferManager.editorBuffer; };
 	inline const FrameBuffer& gm_GetGameBuffer() const { return framebufferManager.gameBuffer; };
 	void gm_FillDepthCube(const CameraData&, int);
-
+	void gm_RenderGameBuffer();
 	//I want my DCMs
 	LightRenderer lightRenderer;
 
@@ -115,6 +116,7 @@ private:
 	SkinnedMeshRenderer skinnedMeshRenderer;
 	DebugRenderer debugRenderer;
 	CubeRenderer cubeRenderer;
+	SphereRenderer sphereRenderer;
 	ParticleRenderer particleRenderer;
 	//Managers
 	ShaderManager shaderManager;

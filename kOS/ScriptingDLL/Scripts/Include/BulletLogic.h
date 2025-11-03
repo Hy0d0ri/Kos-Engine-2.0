@@ -1,21 +1,33 @@
+#pragma once
 #include "ScriptAdapter/TemplateSC.h"
+#include "EnemyManagerScript.h"
 
-class BulletLogic : public TemplateSC {
+class BulletLogic : public TemplateSC
+{
 public:
+	int bulletDamage = 1;
 	float bulletSpeed = 5.f;
-	glm::vec3 direction;
 
-	void Start() override {
-		physicsPtr->GetEventCallback()->OnCollisionEnter.Add([this](const physics::Collision& col) {
-			if (col.thisEntityID != this->entity) { return; }
+	void Start() override
+	{
+		physicsPtr->GetEventCallback()->OnCollisionEnter.Add([this](const physics::Collision &col)
+															 {
+			//if (col.thisEntityID != this->entity) { return; }
 			if (ecsPtr->GetComponent<NameComponent>(col.otherEntityID)->entityTag == "Enemy") {
-				std::cout << "Collided with Entity: " << col.otherEntityID << std::endl;
-			}
-		});
+				if (auto* enemyScript = ecsPtr->GetComponent<EnemyManagerScript>(col.otherEntityID)) {
+					enemyScript->enemyHealth -= bulletDamage;
+
+					if (enemyScript->enemyHealth <= 0) {
+						//ecsPtr->DeleteEntity(col.otherEntityID);
+					}
+				}
+			} });
 	}
 
-	void Update() override {
-		if (auto* tc = ecsPtr->GetComponent<ecs::TransformComponent>(entity)) {
+	void Update() override
+	{
+		if (auto *tc = ecsPtr->GetComponent<ecs::TransformComponent>(entity))
+		{
 			glm::vec3 rotationInDegrees(tc->LocalTransformation.rotation);
 			glm::vec3 rotationInRad = glm::radians(rotationInDegrees);
 			glm::quat q = glm::quat(rotationInRad);
@@ -27,6 +39,5 @@ public:
 		}
 	}
 
-
-	REFLECTABLE(BulletLogic, bulletSpeed, direction)
+	REFLECTABLE(BulletLogic, bulletSpeed)
 };

@@ -85,11 +85,12 @@ namespace Octrees {
 
 		glm::vec3 boundCenter(0.f, 0.f, 0.f);
 
-		for (const auto& id : m_ecs->GetEntitySignatureData()) {
-			ecs::BoxColliderComponent* boxCollider = m_ecs->GetComponent<ecs::BoxColliderComponent>(id.first);
-			ecs::TransformComponent* transform = m_ecs->GetComponent<ecs::TransformComponent>(id.first);
+		for (const auto& id : m_ecs.GetEntitySignatureData()) {
+			ecs::BoxColliderComponent* boxCollider = m_ecs.GetComponent<ecs::BoxColliderComponent>(id.first);
+			ecs::TransformComponent* transform = m_ecs.GetComponent<ecs::TransformComponent>(id.first);
+			ecs::NameComponent* name = m_ecs.GetComponent<ecs::NameComponent>(id.first);
 
-			if (!boxCollider || !transform)
+			if (!boxCollider || !transform || !name || name->entityTag != "Obstacle")
 				continue;
 
 			if (boxCollider->box.bounds.min.x + transform->WorldTransformation.position.x < minBound.x) {
@@ -110,6 +111,14 @@ namespace Octrees {
 			if (boxCollider->box.bounds.max.z + transform->WorldTransformation.position.z > maxBound.z) {
 				maxBound.z = boxCollider->box.bounds.max.z + transform->WorldTransformation.position.z;
 			}
+
+			//std::cout << "MIN BOUND: " << boxCollider->box.bounds.min.x + transform->WorldTransformation.position.x << ", "
+			//	<< boxCollider->box.bounds.min.y + transform->WorldTransformation.position.y << ", "
+			//	<< boxCollider->box.bounds.min.z + transform->WorldTransformation.position.z << std::endl;
+
+			//std::cout << "MAX Bound: " << boxCollider->box.bounds.max.x + transform->WorldTransformation.position.x << ", "
+			//	<< boxCollider->box.bounds.max.y + transform->WorldTransformation.position.y << ", "
+			//	<< boxCollider->box.bounds.max.z + transform->WorldTransformation.position.z << std::endl;
 		}
 
 		boundCenter.x = (minBound.x + maxBound.x) / 2.f;
@@ -121,6 +130,9 @@ namespace Octrees {
 		bounds.center = boundCenter;
 		bounds.size = boundSize;
 		bounds.SetMinMax(boundMin, boundMax);
+
+		//std::cout << "BOUNDS MIN: " << boundMin.x << ", " << boundMin.y << ", " << boundMin.z << std::endl;
+		//std::cout << "BOUNDS MAX: " << boundMax.x << ", " << boundMax.y << ", " << boundMax.z << std::endl;
 	}
 
 	void Octree::GetEdges() {

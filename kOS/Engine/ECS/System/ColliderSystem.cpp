@@ -30,6 +30,10 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 
 using namespace physics;
 
+namespace {
+    constexpr float MINSIZE = 0.01f;
+}
+
 namespace ecs {
 	void ColliderSystem::Init() {
         onDeregister.Add([&](EntityID id) {
@@ -105,7 +109,10 @@ namespace ecs {
             PxFilterData filter;
             filter.word0 = name->Layer;
 
-            glm::vec3 scale = trans->WorldTransformation.scale;
+            glm::vec3& scale = trans->LocalTransformation.scale;
+            scale.x = glm::max(scale.x, MINSIZE);
+            scale.y = glm::max(scale.y, MINSIZE);
+            scale.z = glm::max(scale.z, MINSIZE);
 
             if (box) {
                 glm::vec3 halfExtents = box->box.size * scale * 0.5f;
@@ -114,14 +121,14 @@ namespace ecs {
                 if (!shape) {
                     shape = m_physicsManager.GetPhysics()->createShape(geometry, *m_physicsManager.GetDefaultMaterial(), true);
                     box->shape = shape;
-                } else {
-                    shape->setGeometry(geometry);
-                }
-                shape->setLocalPose(PxTransform{ PxVec3{ box->box.center.x, box->box.center.y, box->box.center.z } });
+                } 
+                shape->setGeometry(geometry);
+                glm::vec3 scaledCenter = box->box.center * scale;
+                shape->setLocalPose(PxTransform{ PxVec3{ scaledCenter.x, scaledCenter.y, scaledCenter.z } });
                 ToPhysxIsTrigger(shape, box->isTrigger);
                 shape->setSimulationFilterData(filter);
                 shape->setQueryFilterData(filter);
-                box->box.bounds.center = trans->WorldTransformation.position + box->box.center * scale;
+                box->box.bounds.center = trans->WorldTransformation.position + scaledCenter;
                 box->box.bounds.extents = halfExtents;
                 box->box.bounds.size = box->box.size * scale;
                 box->box.bounds.min = box->box.bounds.center - box->box.bounds.extents;
@@ -135,10 +142,10 @@ namespace ecs {
                 if (!shape) {
                     shape = m_physicsManager.GetPhysics()->createShape(geometry, *m_physicsManager.GetDefaultMaterial(), true);
                     sphere->shape = shape;
-                } else {
-                    shape->setGeometry(geometry);
-                }
-                shape->setLocalPose(PxTransform{ PxVec3{ sphere->sphere.center.x, sphere->sphere.center.y, sphere->sphere.center.z } });
+                } 
+                shape->setGeometry(geometry);
+                glm::vec3 scaledCenter = sphere->sphere.center * scale;
+                shape->setLocalPose(PxTransform{ PxVec3{ scaledCenter.x, scaledCenter.y, scaledCenter.z } });
                 ToPhysxIsTrigger(shape, sphere->isTrigger);
                 shape->setSimulationFilterData(filter);
                 shape->setQueryFilterData(filter);
@@ -152,9 +159,8 @@ namespace ecs {
                 if (!shape) {
                     shape = m_physicsManager.GetPhysics()->createShape(geometry, *m_physicsManager.GetDefaultMaterial(), true);
                     capsule->shape = shape;
-                } else {
-                    shape->setGeometry(geometry);
-                }
+                } 
+                shape->setGeometry(geometry);
                 PxQuat rot{ PxIdentity };
                 switch (capsule->capsule.capsuleDirection) {
                     case CapsuleDirection::X:
@@ -166,7 +172,8 @@ namespace ecs {
                     default:
                         break;
                 }
-                shape->setLocalPose(PxTransform{ PxVec3{ capsule->capsule.center.x, capsule->capsule.center.y, capsule->capsule.center.z }, rot });
+                glm::vec3 scaledCenter = capsule->capsule.center * scale;
+                shape->setLocalPose(PxTransform{ PxVec3{ scaledCenter.x, scaledCenter.y, scaledCenter.z }, rot });
                 ToPhysxIsTrigger(shape, capsule->isTrigger);
                 shape->setSimulationFilterData(filter);
                 shape->setQueryFilterData(filter);

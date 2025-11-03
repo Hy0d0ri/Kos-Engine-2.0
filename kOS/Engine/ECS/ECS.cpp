@@ -39,6 +39,8 @@ namespace ecs{
 		RegisterComponent<PathfinderComponent>();
 		RegisterComponent<PathfinderTargetComponent>();
 		RegisterComponent<CubeRendererComponent>();
+		RegisterComponent<SphereRendererComponent>();
+
 		RegisterComponent<ParticleComponent>();
 
 		//Allocate memory to each system
@@ -50,8 +52,10 @@ namespace ecs{
 		RegisterSystem<PhysicsSystem, TransformComponent, RigidbodyComponent>(RUNNING);
 		RegisterSystem<CameraSystem, TransformComponent, CameraComponent>();
 		RegisterSystem<MeshRenderSystem, TransformComponent, MaterialComponent, MeshFilterComponent>();
-		RegisterSystem<SkinnedMeshRenderSystem, TransformComponent, SkinnedMeshRendererComponent>();
-		RegisterSystem<CubeRenderSystem, TransformComponent, MeshRendererComponent, CubeRendererComponent>();
+		RegisterSystem<SkinnedMeshRenderSystem, TransformComponent, SkinnedMeshRendererComponent, AnimatorComponent>();
+		RegisterSystem<CubeRenderSystem, TransformComponent, MaterialComponent, CubeRendererComponent>();
+		RegisterSystem<SphereRenderSystem, TransformComponent, MaterialComponent, SphereRendererComponent>();
+
 		RegisterSystem<CanvasTextRenderSystem, TransformComponent, CanvasRendererComponent>();
 		RegisterSystem<CanvasSpriteRenderSystem, TransformComponent, CanvasRendererComponent>();
 		RegisterSystem<AnimatorSystem, TransformComponent, AnimatorComponent>();

@@ -132,9 +132,9 @@ void gui::ImGuiHandler::DrawRenderScreenWindow(unsigned int windowWidth, unsigne
         
         //std::cout << "Clicked pixerl val is " << --pixelVal << '\n';
         --pixelVal;
-        m_clickedEntityId =pixelVal>=0? pixelVal: m_clickedEntityId;
+        m_clickedEntityId =pixelVal>=0.f? static_cast<int>(pixelVal): m_clickedEntityId;
         std::cout << "PixelVal is " << pixelVal << '\n';
-        if (m_ecs.HasComponent<ecs::CanvasRendererComponent>(pixelVal)
+        if (m_ecs.HasComponent<ecs::CanvasRendererComponent>(static_cast<EntityID>(pixelVal))
             || (m_ecs.GetParent(m_clickedEntityId).has_value() &&
                 m_ecs.HasComponent<ecs::CanvasRendererComponent>(m_ecs.GetParent(m_clickedEntityId).value()))) {
             std::cout << "IS UI\n";
@@ -230,7 +230,7 @@ void gui::ImGuiHandler::DrawRenderScreenWindow(unsigned int windowWidth, unsigne
     if (mouseCon)
     {
         ImVec2 currentMousePos = ImGui::GetMousePos();
-        const float cameraSpeed = 0.1; // adjust accordingly
+        const float cameraSpeed = 0.1f; // adjust accordingly
         float sprintMultiplier = 1.f;
         if (ImGui::IsKeyDown(ImGuiKey_LeftShift)) {
             sprintMultiplier = 2.5f;

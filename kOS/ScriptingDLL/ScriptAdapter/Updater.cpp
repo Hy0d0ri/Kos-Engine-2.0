@@ -30,6 +30,19 @@ extern "C"  __declspec(dllexport) void UpdateStatic(StaticVariableManager* svm) 
 	TemplateSC::physicsPtr = static_cast<physics::PhysicsManager*>(svm->physics);
 	TemplateSC::resource = static_cast<ResourceManager*>(svm->resource);
 
+	RegisterScript<BulletLogic>();
+	RegisterScript<EnemyManagerScript>();
+	RegisterScript<PowerupManagerScript>();
+
+	RegisterScript<FirePowerupManagerScript>();
+	RegisterScript<LightningPowerupManagerScript>();
+	RegisterScript<AcidPowerupManagerScript>();
+	RegisterScript<FireLightningPowerupManagerScript>();
+	RegisterScript<FireAcidPowerupManagerScript>();
+	RegisterScript<LightningAcidPowerupManagerScript>();
+
+	RegisterScript<PlayerManagerScript>();
+	RegisterScript<GunScript>();
 
 	RegisterScript<PlayerScript>(TemplateSC::ecsPtr);
 	RegisterScript<EnemyScripts>(TemplateSC::ecsPtr);
