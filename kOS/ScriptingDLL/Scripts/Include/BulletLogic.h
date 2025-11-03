@@ -6,15 +6,16 @@ class BulletLogic : public TemplateSC {
 public:
 	int bulletDamage = 1;
 	float bulletSpeed = 5.f;
-	glm::vec3 direction;
 
 	void Start() override {
 		physicsPtr->OnTriggerEnter.Add([this](const physics::Collision& col) {
 			//if (col.thisEntityID != this->entity) { return; }
 			if (ecsPtr->GetComponent<NameComponent>(col.otherEntityID)->entityTag == "Enemy") {
+				std::cout << "TESTINTETSTING1\n";
 				if (auto* enemyScript = ecsPtr->GetComponent<EnemyManagerScript>(col.otherEntityID)) {
 					enemyScript->enemyHealth -= bulletDamage;
 
+					std::cout << "TESTINTETSTING2\n";
 					if (enemyScript->enemyHealth <= 0) {
 						//ecsPtr->DeleteEntity(col.otherEntityID);
 					}
@@ -37,5 +38,5 @@ public:
 	}
 
 
-	REFLECTABLE(BulletLogic, bulletSpeed, direction)
+	REFLECTABLE(BulletLogic, bulletSpeed)
 };

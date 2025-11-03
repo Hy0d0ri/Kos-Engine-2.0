@@ -141,16 +141,29 @@ public:
 				if (auto* bulletRb = ecsPtr->GetComponent<RigidbodyComponent>(bullet)) {
 					bulletRb->useGravity = false;
 				}
-
-				if (auto* bulletScript = ecsPtr->GetComponent<BulletLogic>(bullet)) {
-					bulletScript->direction = forward;
-				}
 			}
 
 			// Powerup shooting
 			if (Input->IsKeyTriggered(keys::RMB)) {
 				if (currentPowerup == "fire") {
+					ecs::EntityID fireball = ecsPtr->CreateEntity(ecsPtr->GetSceneByEntityID(entity));
+					ecsPtr->GetComponent<NameComponent>(fireball)->entityName = "Fireball";
+					ecsPtr->AddComponent<SphereColliderComponent>(fireball);
+					ecsPtr->AddComponent<RigidbodyComponent>(fireball);
+					ecsPtr->AddComponent<FirePowerupManagerScript>(fireball);
 
+					if (auto* fireballTransform = ecsPtr->GetComponent<TransformComponent>(fireball)) {
+						fireballTransform->LocalTransformation.position = tc->LocalTransformation.position;
+						fireballTransform->LocalTransformation.rotation = glm::vec3(360.f - rotationX, 360.f - rotationY, 0.f);
+					}
+
+					if (auto* fireballCol = ecsPtr->GetComponent<SphereColliderComponent>(fireball)) {
+						fireballCol->isTrigger = true;
+					}
+
+					if (auto* fireballRb = ecsPtr->GetComponent<RigidbodyComponent>(fireball)) {
+						fireballRb->useGravity = false;
+					}
 				}
 				else if (currentPowerup == "lightning") {
 
