@@ -6,18 +6,12 @@
         }
     },
     {
+        "entityGUID": "ddefd134-9956-03ad-970a-1a6800516ac7",
         "MaterialComponent": {
-            "materialGUID": "61cfd855-ca21-6e2a-3bf8-8fc94756f547"
+            "materialGUID": "760ae2de-5d8b-5883-ec56-1fbb23d03de4"
         },
         "MeshFilterComponent": {
             "meshGUID": "084212fc-c344-c615-3381-83350ec06fb7"
-        },
-        "MeshRendererComponent": {
-            "diffuseMaterialGUID": "4d8deac8-5e30-9e34-6f12-37721db6eb53",
-            "specularMaterialGUID": "",
-            "normalMaterialGUID": "",
-            "ambientOcclusionMaterialGUID": "",
-            "roughnessMaterialGUID": ""
         },
         "NameComponent": {
             "entityName": "LevelBlockout",
@@ -65,6 +59,7 @@
         }
     },
     {
+        "entityGUID": "87ee7485-a3fc-f5fa-5780-df9b98d7f06f",
         "CameraComponent": {
             "cameraType": 0,
             "fov": 45.0,
@@ -127,12 +122,13 @@
         }
     },
     {
+        "entityGUID": "70babdb2-0938-a68c-3d00-1fd5ef23c224",
         "LightComponent": {
             "lightType": 1,
             "color": {
                 "x": 1.0,
                 "y": 1.0,
-                "z": 1.0
+                "z": 0.5
             },
             "diffuseStrength": {
                 "x": 1.0,
@@ -156,7 +152,7 @@
             "intesnity": 15.0,
             "shadowCast": false,
             "bakedLighting": false,
-            "depthMapGUID": ""
+            "depthMapGUID": "00000000-0000-0000-0000-000000000000"
         },
         "NameComponent": {
             "entityName": "Point Light 1",
@@ -204,12 +200,13 @@
         }
     },
     {
+        "entityGUID": "6bc8a478-70ff-96fc-3e77-bb89afd26f25",
         "LightComponent": {
             "lightType": 0,
             "color": {
-                "x": 1.0,
-                "y": 1.0,
-                "z": 1.0
+                "x": 0.800000011920929,
+                "y": 0.800000011920929,
+                "z": 1.7000000476837158
             },
             "diffuseStrength": {
                 "x": 1.0,
@@ -224,7 +221,7 @@
             "linear": 0.09000000357627869,
             "quadratic": 0.03200000151991844,
             "direction": {
-                "x": -3.700000047683716,
+                "x": 7.900000095367432,
                 "y": 6.400000095367432,
                 "z": 6.900000095367432
             },
@@ -233,7 +230,7 @@
             "intesnity": 4.400000095367432,
             "shadowCast": false,
             "bakedLighting": false,
-            "depthMapGUID": ""
+            "depthMapGUID": "00000000-0000-0000-0000-000000000000"
         },
         "NameComponent": {
             "entityName": "Directional Light",
@@ -281,6 +278,7 @@
         }
     },
     {
+        "entityGUID": "e8710566-4a01-f3dc-08e8-f86af1bcd5af",
         "BoxColliderComponent": {
             "isTrigger": false,
             "box": {
@@ -342,6 +340,7 @@
         }
     },
     {
+        "entityGUID": "75960179-ecea-580f-bead-8f0ac6d8d7f4",
         "BoxColliderComponent": {
             "isTrigger": false,
             "box": {
@@ -403,12 +402,13 @@
         }
     },
     {
+        "entityGUID": "96849f05-59a6-4309-e040-73c3f9c66789",
         "LightComponent": {
             "lightType": 1,
             "color": {
                 "x": 1.0,
                 "y": 1.0,
-                "z": 1.0
+                "z": 0.5
             },
             "diffuseStrength": {
                 "x": 1.0,
@@ -432,7 +432,7 @@
             "intesnity": 15.0,
             "shadowCast": false,
             "bakedLighting": false,
-            "depthMapGUID": ""
+            "depthMapGUID": "00000000-0000-0000-0000-000000000000"
         },
         "NameComponent": {
             "entityName": "Point Light 2",
@@ -445,9 +445,9 @@
         "TransformComponent": {
             "WorldTransformation": {
                 "position": {
-                    "x": -19.942447662353516,
-                    "y": 6.800000190734863,
-                    "z": -24.200000762939453
+                    "x": -69.94244384765625,
+                    "y": -1.1999998092651367,
+                    "z": -47.20000076293945
                 },
                 "rotation": {
                     "x": 0.0,
@@ -462,9 +462,9 @@
             },
             "LocalTransformation": {
                 "position": {
-                    "x": -19.942447662353516,
-                    "y": 6.800000190734863,
-                    "z": -24.200000762939453
+                    "x": -69.94244384765625,
+                    "y": -1.1999998092651367,
+                    "z": -47.20000076293945
                 },
                 "rotation": {
                     "x": 0.0,
@@ -480,12 +480,13 @@
         }
     },
     {
+        "entityGUID": "47ad69e9-9d1a-e9f3-38e0-c14cbe1783a5",
         "LightComponent": {
             "lightType": 1,
             "color": {
                 "x": 1.0,
                 "y": 1.0,
-                "z": 1.0
+                "z": 0.5
             },
             "diffuseStrength": {
                 "x": 1.0,
@@ -509,7 +510,7 @@
             "intesnity": 21.700000762939453,
             "shadowCast": false,
             "bakedLighting": false,
-            "depthMapGUID": ""
+            "depthMapGUID": "00000000-0000-0000-0000-000000000000"
         },
         "NameComponent": {
             "entityName": "Point Light 3",
@@ -522,9 +523,9 @@
         "TransformComponent": {
             "WorldTransformation": {
                 "position": {
-                    "x": -27.982929229736328,
-                    "y": 22.972122192382813,
-                    "z": 31.747325897216797
+                    "x": -19.982929229736328,
+                    "y": 7.9721221923828125,
+                    "z": -56.25267028808594
                 },
                 "rotation": {
                     "x": 0.0,
@@ -539,9 +540,9 @@
             },
             "LocalTransformation": {
                 "position": {
-                    "x": -27.982929229736328,
-                    "y": 22.972122192382813,
-                    "z": 31.747325897216797
+                    "x": -19.982929229736328,
+                    "y": 7.9721221923828125,
+                    "z": -56.25267028808594
                 },
                 "rotation": {
                     "x": 0.0,
@@ -557,6 +558,7 @@
         }
     },
     {
+        "entityGUID": "1aaf2248-44d4-6645-f38b-6edc3bc94598",
         "BoxColliderComponent": {
             "isTrigger": false,
             "box": {
@@ -618,6 +620,7 @@
         }
     },
     {
+        "entityGUID": "61bb87c1-c3c5-0c87-97a7-e273b93336ac",
         "BoxColliderComponent": {
             "isTrigger": false,
             "box": {
@@ -679,6 +682,7 @@
         }
     },
     {
+        "entityGUID": "60409810-4c8d-a218-e762-7b66c835472e",
         "BoxColliderComponent": {
             "isTrigger": false,
             "box": {
@@ -740,6 +744,7 @@
         }
     },
     {
+        "entityGUID": "531a436c-63cf-759a-aeb1-83595588f437",
         "BoxColliderComponent": {
             "isTrigger": false,
             "box": {
@@ -801,6 +806,7 @@
         }
     },
     {
+        "entityGUID": "e2744f4e-a8da-8ef5-450f-b5303312796f",
         "BoxColliderComponent": {
             "isTrigger": false,
             "box": {
@@ -862,6 +868,7 @@
         }
     },
     {
+        "entityGUID": "26c2f67c-0c32-ce31-bb67-e5d8471efad0",
         "BoxColliderComponent": {
             "isTrigger": false,
             "box": {
@@ -923,6 +930,7 @@
         }
     },
     {
+        "entityGUID": "93751020-0863-af5d-4b33-214842b0b10e",
         "BoxColliderComponent": {
             "isTrigger": false,
             "box": {
@@ -984,6 +992,7 @@
         }
     },
     {
+        "entityGUID": "f52cf630-7aca-6921-2862-0b79734b7f6b",
         "BoxColliderComponent": {
             "isTrigger": false,
             "box": {
@@ -1045,6 +1054,7 @@
         }
     },
     {
+        "entityGUID": "a9e93733-e9a6-82a7-e2a7-dbf6c87497b5",
         "BoxColliderComponent": {
             "isTrigger": false,
             "box": {
@@ -1106,6 +1116,7 @@
         }
     },
     {
+        "entityGUID": "cde5305e-2f8b-8b03-6d9d-19635d5db7a6",
         "BoxColliderComponent": {
             "isTrigger": false,
             "box": {
@@ -1167,6 +1178,7 @@
         }
     },
     {
+        "entityGUID": "079c0a20-7b7e-9b3b-c06f-c3f68bb311bc",
         "BoxColliderComponent": {
             "isTrigger": false,
             "box": {
@@ -1228,6 +1240,7 @@
         }
     },
     {
+        "entityGUID": "d022b605-00e8-26f7-e008-cf0c13d9bb5b",
         "BoxColliderComponent": {
             "isTrigger": false,
             "box": {
@@ -1289,6 +1302,7 @@
         }
     },
     {
+        "entityGUID": "6b2bb4b3-5cc7-92c3-fa2c-ac405eb4cbdb",
         "BoxColliderComponent": {
             "isTrigger": false,
             "box": {
@@ -1350,6 +1364,7 @@
         }
     },
     {
+        "entityGUID": "0aead9ca-432d-fb26-6c31-73e9a0687e16",
         "BoxColliderComponent": {
             "isTrigger": false,
             "box": {
@@ -1411,6 +1426,7 @@
         }
     },
     {
+        "entityGUID": "95703255-d6fa-0180-1425-49399e2917a3",
         "BoxColliderComponent": {
             "isTrigger": false,
             "box": {
@@ -1472,6 +1488,7 @@
         }
     },
     {
+        "entityGUID": "6eccd5f0-b203-136e-5175-fee757dfca19",
         "BoxColliderComponent": {
             "isTrigger": false,
             "box": {
@@ -1533,6 +1550,7 @@
         }
     },
     {
+        "entityGUID": "61a06788-c306-1cb0-9b04-536ff8d48e4a",
         "BoxColliderComponent": {
             "isTrigger": false,
             "box": {
@@ -1594,6 +1612,7 @@
         }
     },
     {
+        "entityGUID": "594abde4-16d3-684a-b6c0-62794b0cf520",
         "BoxColliderComponent": {
             "isTrigger": false,
             "box": {
@@ -1655,6 +1674,7 @@
         }
     },
     {
+        "entityGUID": "138012e7-cfdc-cb14-133d-9c91d79f4d39",
         "BoxColliderComponent": {
             "isTrigger": false,
             "box": {
@@ -1716,6 +1736,7 @@
         }
     },
     {
+        "entityGUID": "d0b4544a-9bff-7bdf-ffbd-6ede768e65ee",
         "BoxColliderComponent": {
             "isTrigger": false,
             "box": {
@@ -1777,6 +1798,7 @@
         }
     },
     {
+        "entityGUID": "f2c4fe45-26e0-a3e2-afe9-5d73feb30211",
         "BoxColliderComponent": {
             "isTrigger": false,
             "box": {
@@ -1838,6 +1860,7 @@
         }
     },
     {
+        "entityGUID": "a0d63e62-2a63-98e9-bbee-af41c8113ec0",
         "BoxColliderComponent": {
             "isTrigger": false,
             "box": {
@@ -1899,6 +1922,7 @@
         }
     },
     {
+        "entityGUID": "06873602-9cd3-6700-16a7-ff45fa9d79db",
         "BoxColliderComponent": {
             "isTrigger": false,
             "box": {
@@ -1960,6 +1984,7 @@
         }
     },
     {
+        "entityGUID": "103ad2f6-63f6-d4c5-d522-edbb77f09bd9",
         "BoxColliderComponent": {
             "isTrigger": false,
             "box": {
@@ -2021,6 +2046,7 @@
         }
     },
     {
+        "entityGUID": "4ac531c0-af17-fe5e-25b7-bfa38674bfec",
         "BoxColliderComponent": {
             "isTrigger": false,
             "box": {
@@ -2082,6 +2108,7 @@
         }
     },
     {
+        "entityGUID": "a44c1bf5-45e8-a125-f3d8-c214a6949ffb",
         "BoxColliderComponent": {
             "isTrigger": false,
             "box": {
@@ -2143,6 +2170,7 @@
         }
     },
     {
+        "entityGUID": "15f6176f-9454-0979-7bcf-9d0fe78ca438",
         "BoxColliderComponent": {
             "isTrigger": false,
             "box": {
@@ -2204,6 +2232,7 @@
         }
     },
     {
+        "entityGUID": "fc460119-36aa-7223-095d-6cf30ef2bd90",
         "BoxColliderComponent": {
             "isTrigger": false,
             "box": {
@@ -2265,6 +2294,7 @@
         }
     },
     {
+        "entityGUID": "5c0d07d6-85cb-3a61-5d1e-1d4078f413fb",
         "BoxColliderComponent": {
             "isTrigger": false,
             "box": {
@@ -2326,6 +2356,7 @@
         }
     },
     {
+        "entityGUID": "3cc09014-de7e-bd1d-6669-64f19b4cf3e0",
         "BoxColliderComponent": {
             "isTrigger": false,
             "box": {
@@ -2387,6 +2418,7 @@
         }
     },
     {
+        "entityGUID": "e554e514-c201-8e73-113c-6f8df7b3671a",
         "BoxColliderComponent": {
             "isTrigger": false,
             "box": {
@@ -2448,6 +2480,7 @@
         }
     },
     {
+        "entityGUID": "423f9b0d-9e3e-cba7-8272-f5ea592619f5",
         "BoxColliderComponent": {
             "isTrigger": false,
             "box": {
@@ -2509,6 +2542,7 @@
         }
     },
     {
+        "entityGUID": "28a341e5-06f4-36e0-c24c-6f828dc95eb7",
         "BoxColliderComponent": {
             "isTrigger": false,
             "box": {
@@ -2570,6 +2604,7 @@
         }
     },
     {
+        "entityGUID": "f37e8be1-7630-f729-49e8-9342c5a5ffcd",
         "BoxColliderComponent": {
             "isTrigger": false,
             "box": {
@@ -2631,6 +2666,7 @@
         }
     },
     {
+        "entityGUID": "9f68c1ca-873c-2384-6197-5938340e8657",
         "BoxColliderComponent": {
             "isTrigger": false,
             "box": {
@@ -2692,6 +2728,7 @@
         }
     },
     {
+        "entityGUID": "de8be462-7f2b-59de-beee-7a7f7fe0a640",
         "BoxColliderComponent": {
             "isTrigger": false,
             "box": {
@@ -2748,6 +2785,205 @@
                     "x": 6.0,
                     "y": 6.0,
                     "z": 6.0
+                }
+            }
+        }
+    },
+    {
+        "entityGUID": "7bda6958-07a8-76b9-5001-e5a9f3cc3f73",
+        "LightComponent": {
+            "lightType": 1,
+            "color": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "diffuseStrength": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "specularStrength": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "linear": -9.8100004196167,
+            "quadratic": 0.6299999952316284,
+            "direction": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "cutOff": 5.5,
+            "outerCutOff": 10.5,
+            "intesnity": 15.0,
+            "shadowCast": false,
+            "bakedLighting": false,
+            "depthMapGUID": "00000000-0000-0000-0000-000000000000"
+        },
+        "NameComponent": {
+            "entityName": "Point Light 4",
+            "Layer": 0,
+            "entityTag": "Default",
+            "isPrefab": false,
+            "prefabName": "",
+            "hide": false
+        },
+        "TransformComponent": {
+            "WorldTransformation": {
+                "position": {
+                    "x": -45.942447662353516,
+                    "y": -3.200000047683716,
+                    "z": -40.20000076293945
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": -0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            "LocalTransformation": {
+                "position": {
+                    "x": -45.942447662353516,
+                    "y": -3.200000047683716,
+                    "z": -40.20000076293945
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": -0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        }
+    },
+    {
+        "entityGUID": "6741426d-4b37-3fe5-8ea5-1ac4be1efd0d",
+        "BoxColliderComponent": {
+            "isTrigger": false,
+            "box": {
+                "center": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "size": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        },
+        "MaterialComponent": {
+            "materialGUID": "760ae2de-5d8b-5883-ec56-1fbb23d03de4"
+        },
+        "MeshFilterComponent": {
+            "meshGUID": "824d152d-be2f-bbb9-9482-090d580683ff"
+        },
+        "NameComponent": {
+            "entityName": "Barrel Prop",
+            "Layer": 0,
+            "entityTag": "Default",
+            "isPrefab": false,
+            "prefabName": "",
+            "hide": false
+        },
+        "TransformComponent": {
+            "WorldTransformation": {
+                "position": {
+                    "x": -16.54159927368164,
+                    "y": 4.0,
+                    "z": -62.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": -0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 0.019999999552965164,
+                    "y": 0.019999999552965164,
+                    "z": 0.019999999552965164
+                }
+            },
+            "LocalTransformation": {
+                "position": {
+                    "x": -16.54159927368164,
+                    "y": 4.0,
+                    "z": -62.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": -0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 0.019999999552965164,
+                    "y": 0.019999999552965164,
+                    "z": 0.019999999552965164
+                }
+            }
+        }
+    },
+    {
+        "entityGUID": "3e0c5349-9075-a72a-bf32-24fe95d5ab9f",
+        "MaterialComponent": {
+            "materialGUID": "e9ece6d7-4ed7-73b3-9309-ec58d5d77a07"
+        },
+        "MeshFilterComponent": {
+            "meshGUID": "874f2cee-12a8-60ee-5eb0-47b549f08822"
+        },
+        "NameComponent": {
+            "entityName": "Gun",
+            "Layer": 0,
+            "entityTag": "Default",
+            "isPrefab": false,
+            "prefabName": "",
+            "hide": false
+        },
+        "TransformComponent": {
+            "WorldTransformation": {
+                "position": {
+                    "x": -19.5,
+                    "y": 6.0,
+                    "z": -71.80000305175781
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 2.9803407192230225,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 0.03999999910593033,
+                    "y": 0.03999999910593033,
+                    "z": 0.03999999910593033
+                }
+            },
+            "LocalTransformation": {
+                "position": {
+                    "x": -19.5,
+                    "y": 6.0,
+                    "z": -71.80000305175781
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 2.9803407192230225,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 0.03999999910593033,
+                    "y": 0.03999999910593033,
+                    "z": 0.03999999910593033
                 }
             }
         }
