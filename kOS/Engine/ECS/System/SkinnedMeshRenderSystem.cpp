@@ -47,7 +47,7 @@ namespace ecs {
             TransformComponent* transform = ecs->GetComponent<TransformComponent>(id);
             NameComponent* nameComp = ecs->GetComponent<NameComponent>(id);
             SkinnedMeshRendererComponent* skinnedMesh = ecs->GetComponent<SkinnedMeshRendererComponent>(id);
-
+            AnimatorComponent* anim = ecs->GetComponent<AnimatorComponent>(id);
             // Skip entities not in this scene or hidden
             if (!ecs->layersStack.m_layerBitSet.test(nameComp->Layer) || nameComp->hide)
                 continue;
@@ -67,12 +67,10 @@ namespace ecs {
                 skeleton = rm->GetResource<R_Animation>(skinnedMesh->skeletonGUID).get();
                 mesh = rm->GetResource<R_Model>(skinnedMesh->skinnedMeshGUID).get();
 
-                if (skeleton)
+                if (skeleton && anim->m_IsPlaying)
                 {
-                    // fix this
-                    skeleton->m_CurrentTime += skeleton->GetTicksPerSecond() * ecs->m_GetDeltaTime();
-                    float wtf = skeleton->GetDuration();
-                    skeleton->m_CurrentTime = fmod(skeleton->m_CurrentTime, skeleton->GetDuration());
+                    anim->m_CurrentTime += skeleton->GetTicksPerSecond() * ecs->m_GetDeltaTime() * anim->m_PlaybackSpeed;
+                    anim->m_CurrentTime = fmod(anim->m_CurrentTime, skeleton->GetDuration());
                 }
                 std::shared_ptr<R_Texture> diff = rm->GetResource<R_Texture>(mat->md.diffuseMaterialGUID);
                 std::shared_ptr<R_Texture> spec = rm->GetResource<R_Texture>(mat->md.specularMaterialGUID);
@@ -87,7 +85,7 @@ namespace ecs {
                // std::shared_ptr<R_Texture> rough = rm->GetResource<R_Texture>(skinnedMesh->roughnessMaterialGUID);
 
                 if (mesh)
-                    gm->gm_PushSkinnedMeshData(SkinnedMeshData{ mesh, skeleton, PBRMaterial{diff,spec,rough,ao,norm}, transform->transformation, 0.f,id });
+                    gm->gm_PushSkinnedMeshData(SkinnedMeshData{ mesh, skeleton, PBRMaterial{diff,spec,rough,ao,norm}, transform->transformation, anim->m_CurrentTime,id });
             }
             //else
                // mesh = static_cast<R_Model*>(skinnedMesh->cachedSkinnedMeshResource);
