@@ -24,8 +24,6 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 #include "GraphicsManager.h"
 #include "Camera.h"
 
-std::shared_ptr<GraphicsManager> GraphicsManager::gm = std::make_shared<GraphicsManager>();
-
 //Variables to debug graphics
 namespace DebugGraphics {
 	std::map<std::string, Shader>shaderList;
@@ -539,6 +537,15 @@ void GraphicsManager::gm_ClearGBuffer()
 	glBlitFramebuffer(0, 0, static_cast<GLint>(windowWidth), static_cast<GLint>(windowHeight), 0, 0,
 		static_cast<GLint>(windowWidth), static_cast<GLint>(windowHeight), GL_DEPTH_BUFFER_BIT, GL_NEAREST);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void GraphicsManager::gm_UpdateBuffers(int width,int height) {
+
+	if (this->windowWidth != width || this->windowHeight != height) {
+		framebufferManager.Update(width, height);
+		this->windowWidth = width;
+		this->windowHeight = height;
+	}
 }
 void GraphicsManager::gm_RenderGameBuffer(){
 	glViewport(0, 0, framebufferManager.gameBuffer.width, framebufferManager.gameBuffer.height);

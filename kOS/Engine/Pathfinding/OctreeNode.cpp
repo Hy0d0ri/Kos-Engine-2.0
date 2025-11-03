@@ -63,8 +63,8 @@ namespace Octrees {
 		return children.empty();
 	}
 
-	void OctreeNode::Divide(ecs::EntityID id) {
-		Divide(OctreeObject(id));
+	void OctreeNode::Divide(const ecs::TransformComponent* tc, const ecs::BoxColliderComponent* bc) {
+		Divide(OctreeObject(tc, bc));
 	}
 
 	void OctreeNode::Divide(OctreeObject&& octreeObject) {
@@ -100,8 +100,7 @@ namespace Octrees {
 		objects.push_back(octreeObject);
 	}
 
-	void OctreeNode::DrawNode() {
-		std::shared_ptr<GraphicsManager> gm = GraphicsManager::GetInstance();
+	void OctreeNode::DrawNode(GraphicsManager* gm) {
 		glm::mat4 model{ 1.f };
 		model = glm::translate(model, bounds.center) * glm::scale(model, bounds.size * 2.f);
 		BasicDebugData basicDebug;
@@ -112,7 +111,7 @@ namespace Octrees {
 		if (!children.empty()) {
 			for (OctreeNode child : children) {
 				if (child.id != -1) {
-					child.DrawNode();
+					child.DrawNode(gm);
 				}
 			}
 		}
