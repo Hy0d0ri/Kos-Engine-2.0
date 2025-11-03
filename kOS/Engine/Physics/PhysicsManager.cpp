@@ -115,8 +115,8 @@ namespace physics {
 		if (!m_scene) { return; }
 		m_accumulator += deltaTime;
 		while (m_accumulator >= m_fixedDeltaTime) {
-			//m_scene->simulate(m_fixedDeltaTime);
-			//m_scene->fetchResults(true);
+			m_scene->simulate(m_fixedDeltaTime);
+			m_scene->fetchResults(true);
 			if (m_eventCallback) { 
 				m_eventCallback->ProcessCollisionStay();
 				m_eventCallback->ProcessTriggerStay(); 
