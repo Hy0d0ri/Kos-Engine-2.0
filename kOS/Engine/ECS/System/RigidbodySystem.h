@@ -28,8 +28,9 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 namespace ecs {
 	class RigidbodySystem : public ISystem {
 	public:
+		using ISystem::ISystem;
 		void Init() override;
-		void Update(const std::string&) override;
+		void Update() override;
 		REFLECTABLE(RigidbodySystem)
 	};
 }

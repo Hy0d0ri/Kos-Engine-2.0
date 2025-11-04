@@ -14,6 +14,7 @@
 #include "LightComponent.h"
 #include "ScriptComponent.h"
 #include "CubeRenderComponent.h"
+#include "SphereComponent.h"
 #include "MaterialComponent.h"
 
 #include "BoxColliderComponent.h"
@@ -23,4 +24,6 @@
 #include "CharacterControllerComponent.h"
 
 #include "OctreeGeneratorComponent.h"
+#include "PathfinderComponent.h"
+#include "PathfinderTargetComponent.h"
 #include "ParticleComponent.h"

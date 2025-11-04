@@ -137,6 +137,7 @@ public:
 	void UseGTextures();
 	unsigned int RetrieveBuffer() { return gBuffer;;}
 	void UseGBufferShader() { shader->Use();;}
+	void Clear();
 	unsigned int gMaterial;
 private:
 	unsigned int gBuffer;
@@ -157,4 +158,19 @@ public:
 private:
 	unsigned int depthMap;
 	Shader* shader;
+};
+
+class UIBuffer {
+public:
+	void InitializeUIBuffer(int width, int height);
+	void InitializeUIBuffer(int width, int height,GLuint gBuffTtex);
+	void Update(int width, int height, GLuint gBuffTtex);
+	void BindForDrawing();
+	unsigned int RetrieveBuffer() { return uiBuffer; }
+	unsigned int gMaterial;
+	GLuint texID{};
+private:
+	int width{}, height{};
+	unsigned int uiBuffer;
+	unsigned int rboDepth;
 };

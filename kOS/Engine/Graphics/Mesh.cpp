@@ -106,8 +106,8 @@ void Cube::CreateMesh() {
     glBindVertexArray(0);
 
     primitiveType = GL_TRIANGLES;
-}
 
+}
 void Cube::DrawMesh()
 {
 	//std::cout << "DRAWOING SQUARE \n";
@@ -125,13 +125,13 @@ void Sphere::CreateMesh() {
     float nx, ny, nz, lengthInv = 1.0f / radius;    // vertex normal
     float s, t;                                     // vertex texCoord
 
-    float sectorStep = 2 * PI / sectorCount;
-    float stackStep = PI / stackCount;
+    float sectorStep = static_cast<float>(2.f * PI / sectorCount);
+    float stackStep = static_cast<float>(PI / stackCount);
     float sectorAngle, stackAngle;
     std::vector <float>vertexData;
 
     for (int i{ 0 }; i <= stackCount; i++) {
-        stackAngle = PI / 2 - i * stackStep;
+        stackAngle = static_cast<float>(PI / 2 - i * stackStep);
         xy = radius * cosf(stackAngle);
         z = radius * sinf(stackAngle);
 
@@ -269,7 +269,7 @@ void Sphere::CreateMesh() {
     glBindVertexArray(0);
 
     primitiveType = GL_TRIANGLES;
-    drawCount = indices.size();
+    drawCount = static_cast<GLint>(indices.size());
     //std::cout << "CREATED SPHERE\n";
 }
 
@@ -383,6 +383,96 @@ void DebugCircle::CreateMesh() {
 void DebugCircle::DrawMesh(){
     glBindVertexArray(vaoId);
     glDrawElements(GL_LINE_LOOP, 48, GL_UNSIGNED_SHORT, 0);
+    glBindVertexArray(0);
+}
+
+void DebugCapsule::CreateMesh() {
+    std::vector<glm::vec3> vertices;
+    std::vector<unsigned short> indices;
+
+    const int segments = 24;     
+    const int arcSegments = 12;  
+    const float angleStep = static_cast<float>(2.0f * PI / segments);
+    const float halfHeight = height * 0.5f;
+
+    auto AddCircle = [&](float y, float r) {
+        for (int i = 0; i <= segments; ++i) {
+            float theta = i * angleStep;
+            vertices.emplace_back(r * cosf(theta), y, r * sinf(theta));
+        }
+    };
+
+    AddCircle(halfHeight, radius);
+    AddCircle(-halfHeight, radius);
+
+    int topStart = 0;
+    int bottomStart = segments + 1;
+
+    for (int i = 0; i < segments; ++i) {
+        indices.push_back(topStart + i);
+        indices.push_back(topStart + i + 1);
+    }
+    for (int i = 0; i < segments; ++i) {
+        indices.push_back(bottomStart + i);
+        indices.push_back(bottomStart + i + 1);
+    }
+    for (int i = 0; i < 4; ++i) {
+        int seg = i * segments / 4;
+        indices.push_back(topStart + seg);
+        indices.push_back(bottomStart + seg);
+    }
+
+    auto AddHemisphere = [&](bool top) {
+        float yCenter = top ? halfHeight : -halfHeight;
+        float sign = top ? 1.0f : -1.0f;
+        for (int i = 0; i < 4; ++i) {
+            float baseAngle = static_cast<float>(i * PI / 2.0f);
+            unsigned short arcStart = static_cast<unsigned short>(vertices.size());
+            for (int j = 0; j <= arcSegments; ++j) {
+                float phi = static_cast<float>(PI / 2.0f * static_cast<float>(j) / arcSegments);
+                float y = yCenter + sign * radius * sinf(phi);
+                float r = radius * cosf(phi);
+                float x = r * cosf(baseAngle);
+                float z = r * sinf(baseAngle);
+                vertices.emplace_back(x, y, z);
+            }
+            for (int k = 0; k < arcSegments; ++k) {
+                indices.push_back(arcStart + k);
+                indices.push_back(arcStart + k + 1);
+            }
+        }
+    };
+
+    AddHemisphere(true);
+    AddHemisphere(false);
+
+    GLuint VBO, EBO;
+    glGenVertexArrays(1, &vaoId);
+    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
+
+    glBindVertexArray(vaoId);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), vertices.data(), GL_STATIC_DRAW);
+
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned short), indices.data(), GL_STATIC_DRAW);
+
+    glBindVertexArray(0);
+
+    primitiveType = GL_LINES;
+    drawCount = static_cast<GLint>(indices.size());
+}
+
+void DebugCapsule::DrawMesh() {
+    glLineWidth(lineWidth);
+    glEnable(GL_LINE_SMOOTH);
+    glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+    glBindVertexArray(vaoId);
+    glDrawElements(primitiveType, drawCount, GL_UNSIGNED_SHORT, 0);
     glBindVertexArray(0);
 }
 

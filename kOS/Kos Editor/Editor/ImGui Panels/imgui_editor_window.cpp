@@ -45,14 +45,13 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 #include "Resources/ResourceManager.h"
 #include "AssetManager/Prefab.h"
 
-#include "ECS/Hierachy.h"
+#include "ECS/ecs.h"
 
 #include "Graphics/GraphicsManager.h"
 
 
 void gui::ImGuiHandler::DrawRenderScreenWindow(unsigned int windowWidth, unsigned int windowHeight)
 {
-    ecs::ECS* ecs = ecs::ECS::GetInstance();
 
     ImGuiWindowFlags window_flags = 0;
     window_flags |= ImGuiWindowFlags_MenuBar;
@@ -103,14 +102,15 @@ void gui::ImGuiHandler::DrawRenderScreenWindow(unsigned int windowWidth, unsigne
     //    (void*)(GLuint)GraphicsManager::GetInstance()->gm_GetEditorBuffer().texID,
     //    pos, pMax,
     //    ImVec2(0, 1), ImVec2(1, 0));
-    const FrameBuffer* fbAdd = &GraphicsManager::GetInstance()->gm_GetEditorBuffer();
+    const FrameBuffer* fbAdd = &m_graphicsManager.gm_GetEditorBuffer();
     ImGui::GetWindowDrawList()->AddImage(
         reinterpret_cast<void*>(static_cast<uintptr_t>(fbAdd->texID)),
         pos, pMax,
         ImVec2(0, 1), ImVec2(1, 0));
+
     //Get mouse position
     ImVec2 mousePos = ImGui::GetIO().MousePos;
-    if (ImGui::IsMouseClicked(ImGuiMouseButton_Left)&& ImGui::IsWindowHovered()) {
+    if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && ImGui::IsWindowHovered() && !ImGuizmo::IsOver()) {
         // Mouse click relative to image
         float relX = (mousePos.x - pos.x) / (pMax.x - pos.x);
         float relY = (mousePos.y - pos.y) / (pMax.y - pos.y);
@@ -120,18 +120,30 @@ void gui::ImGuiHandler::DrawRenderScreenWindow(unsigned int windowWidth, unsigne
 
         int pixelX = static_cast<int>(relX * fbAdd->width);
         int pixelY = -(static_cast<int>(relY * fbAdd->height) - fbAdd->height);
-        
+
         //Get texture data
         GLuint fbo;
         glGenFramebuffers(1, &fbo);
         glBindFramebuffer(GL_FRAMEBUFFER, fbo);
         // Bind your texture to the FBO
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, GraphicsManager::GetInstance()->gm_GetFBM()->gBuffer.gMaterial, 0);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_graphicsManager.gm_GetFBM()->gBuffer.gMaterial, 0);
         // Read just one pixel
         float pixelVal;
         glReadPixels(pixelX, pixelY, 1, 1, GL_ALPHA, GL_FLOAT, &pixelVal);
-        m_clickedEntityId = pixelVal;
-        //std::cout << "PixelVal is " << pixelVal << '\n';
+        
+        //std::cout << "Clicked pixerl val is " << --pixelVal << '\n';
+        --pixelVal;
+        m_clickedEntityId =pixelVal>=0.f? static_cast<int>(pixelVal): m_clickedEntityId;
+        std::cout << "PixelVal is " << pixelVal << '\n';
+        if (m_ecs.HasComponent<ecs::CanvasRendererComponent>(static_cast<EntityID>(pixelVal))
+            || (m_ecs.GetParent(m_clickedEntityId).has_value() &&
+                m_ecs.HasComponent<ecs::CanvasRendererComponent>(m_ecs.GetParent(m_clickedEntityId).value()))) {
+            std::cout << "IS UI\n";
+            m_isUi = true;
+        }
+        else {
+            m_isUi = false;
+        }
         //Get texture
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         glDeleteFramebuffers(1, &fbo);
@@ -205,13 +217,13 @@ void gui::ImGuiHandler::DrawRenderScreenWindow(unsigned int windowWidth, unsigne
     static ImVec2 lastMousePos = ImVec2(0, 0);
     static bool firstMouseInput = true;
 
-    if (ImGui::IsMouseClicked(ImGuiMouseButton_Right) && ImGui::IsWindowHovered())
+    if ((ImGui::IsMouseClicked(ImGuiMouseButton_Right) || ImGui::IsMouseClicked(ImGuiMouseButton_Middle)) && ImGui::IsWindowHovered())
     {
         mouseCon = true;
         firstMouseInput = true;
         lastMousePos = ImGui::GetMousePos();
     }
-    else if (ImGui::IsMouseReleased(ImGuiMouseButton_Right))
+    else if ((ImGui::IsMouseReleased(ImGuiMouseButton_Right) || ImGui::IsMouseReleased(ImGuiMouseButton_Middle)))
     {
         mouseCon = false;
     }
@@ -219,25 +231,25 @@ void gui::ImGuiHandler::DrawRenderScreenWindow(unsigned int windowWidth, unsigne
     if (mouseCon)
     {
         ImVec2 currentMousePos = ImGui::GetMousePos();
-        const float cameraSpeed = 0.05f; // adjust accordingly
+        const float cameraSpeed = 0.1f; // adjust accordingly
         float sprintMultiplier = 1.f;
         if (ImGui::IsKeyDown(ImGuiKey_LeftShift)) {
             sprintMultiplier = 2.5f;
         }
         else {
             sprintMultiplier = 1.f;
-
         }
+
         if (ImGui::IsKeyDown(ImGuiKey_W)) {
-            if (EditorCamera::editorCamera.orbitMode)EditorCamera::editorCamera.SwitchMode(false);
-            EditorCamera::editorCamera.position += sprintMultiplier*cameraSpeed * EditorCamera::editorCamera.direction;
+            if (EditorCamera::editorCamera.orbitMode) EditorCamera::editorCamera.SwitchMode(false);
+            EditorCamera::editorCamera.position += sprintMultiplier * cameraSpeed * EditorCamera::editorCamera.direction;
         }
         if (ImGui::IsKeyDown(ImGuiKey_S)) {
-            if (EditorCamera::editorCamera.orbitMode)EditorCamera::editorCamera.SwitchMode(false);
+            if (EditorCamera::editorCamera.orbitMode) EditorCamera::editorCamera.SwitchMode(false);
             EditorCamera::editorCamera.position -= sprintMultiplier * cameraSpeed * EditorCamera::editorCamera.direction;
         }
         if (ImGui::IsKeyDown(ImGuiKey_A)) {
-            if (EditorCamera::editorCamera.orbitMode)EditorCamera::editorCamera.SwitchMode(false);
+            if (EditorCamera::editorCamera.orbitMode) EditorCamera::editorCamera.SwitchMode(false);
             EditorCamera::editorCamera.position -= sprintMultiplier * cameraSpeed * glm::normalize(glm::cross(EditorCamera::editorCamera.direction, glm::vec3{ 0.0f, 1.0f, 0.0f }));
         }
         if (ImGui::IsKeyDown(ImGuiKey_D)) {
@@ -250,7 +262,17 @@ void gui::ImGuiHandler::DrawRenderScreenWindow(unsigned int windowWidth, unsigne
             float deltaY = currentMousePos.y - lastMousePos.y;
 
             // Call your camera function with the delta
-            EditorCamera::editorCamera.onCursor(deltaX, deltaY);
+            if (ImGui::IsMouseDown(ImGuiMouseButton_Right)) {
+                EditorCamera::editorCamera.onCursor(deltaX, deltaY);
+            }
+            else if (ImGui::IsMouseDown(ImGuiMouseButton_Middle)) { // Needs to be fixed
+                if (std::abs(deltaX) > 0.1f && std::abs(deltaY) > 0.1f) {
+                    if (EditorCamera::editorCamera.orbitMode) EditorCamera::editorCamera.SwitchMode(false);
+                    glm::vec3 right = glm::normalize(glm::cross(EditorCamera::editorCamera.direction, EditorCamera::editorCamera.up));
+                    glm::vec3 up = glm::normalize(glm::cross(right, EditorCamera::editorCamera.direction));
+                    EditorCamera::editorCamera.position += (deltaX * right - deltaY * up) * cameraSpeed;
+                }
+            }
         }
 
         lastMousePos = currentMousePos;
@@ -292,13 +314,13 @@ void gui::ImGuiHandler::DrawRenderScreenWindow(unsigned int windowWidth, unsigne
         //auto transform = calculateworld();
         //ImVec2 WorldMouse = ImVec2{ transform.x, transform.y };
         ////calculate AABB of each object (active scenes)
-        //for (auto& sceneentity : ecs->sceneMap) {
+        //for (auto& sceneentity : m_ecs.sceneMap) {
 
         //    if (!sceneentity.second.isActive) continue;
 
         //    for (auto& entity : sceneentity.second.sceneIDs) {
         //        //calculate AABB
-        //        auto* tc = ecs->GetComponent<ecs::TransformComponent>(entity);
+        //        auto* tc = m_ecs.GetComponent<ecs::TransformComponent>(entity);
         //        const glm::mat3x3& transformation = tc->transformation;
 
         //       /* glm::vec2 min, max;
@@ -325,7 +347,7 @@ void gui::ImGuiHandler::DrawRenderScreenWindow(unsigned int windowWidth, unsigne
     //delete entity
     if (ImGui::IsKeyPressed(ImGuiKey_Delete)) {
         if (m_clickedEntityId >= 0) {
-            ecs::ECS::GetInstance()->DeleteEntity(m_clickedEntityId);
+            m_ecs.DeleteEntity(m_clickedEntityId);
             m_clickedEntityId = -1;
         }
     }
@@ -334,7 +356,7 @@ void gui::ImGuiHandler::DrawRenderScreenWindow(unsigned int windowWidth, unsigne
     ImGui::Dummy(renderWindowSize);
     if (ImGui::BeginDragDropTarget()) {
         //if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("file")) {
-        //    ecs::ECS* ecs = ecs::ECS::GetInstance();
+        //    ecs::ECS* ecs =ComponentRegistry::GetECSInstance();
 
         //    IM_ASSERT(payload->DataSize == sizeof(std::filesystem::path));
         //    std::filesystem::path* filename = static_cast<std::filesystem::path*>(payload->Data);
@@ -343,50 +365,50 @@ void gui::ImGuiHandler::DrawRenderScreenWindow(unsigned int windowWidth, unsigne
         //    glm::vec3 translate{};
 
         //    if (filename->filename().extension().string() == ".png" || filename->filename().extension().string() == ".jpg") {
-        //        ecs::EntityID id = ecs->CreateEntity(m_activeScene); //assign to active scene
-        //        ecs::TransformComponent* transCom = ecs->GetComponent<ecs::TransformComponent>(id);
+        //        ecs::EntityID id = m_ecs.CreateEntity(m_activeScene); //assign to active scene
+        //        ecs::TransformComponent* transCom = m_ecs.GetComponent<ecs::TransformComponent>(id);
         //        transCom->WorldTransformation.position = translate;
         //        // Insert matrix
-        //        ecs::NameComponent* nameCom = ecs->GetComponent<ecs::NameComponent>(id);
+        //        ecs::NameComponent* nameCom = m_ecs.GetComponent<ecs::NameComponent>(id);
         //        nameCom->entityName = filename->filename().stem().string();
 
-        //        ecs::SpriteComponent* spriteCom = ecs->AddComponent<ecs::SpriteComponent>(id);
+        //        ecs::SpriteComponent* spriteCom = m_ecs.AddComponent<ecs::SpriteComponent>(id);
 
         //        if (m_prefabSceneMode) {
-        //            hierachy::m_SetParent(ecs->sceneMap.find(m_activeScene)->second.prefabID, id);
+        //            hierachy::m_SetParent(m_ecs.sceneMap.find(m_activeScene)->second.prefabID, id);
         //        }
 
         //        m_clickedEntityId = id;
         //    }
         //    if (filename->filename().extension().string() == ".ttf") {
 
-        //        ecs::EntityID id = ecs->CreateEntity(m_activeScene); //assign to active scene
-        //        ecs::TransformComponent* transCom = ecs->GetComponent<ecs::TransformComponent>(id);
+        //        ecs::EntityID id = m_ecs.CreateEntity(m_activeScene); //assign to active scene
+        //        ecs::TransformComponent* transCom = m_ecs.GetComponent<ecs::TransformComponent>(id);
         //        transCom->WorldTransformation.position = translate;
         //        // Insert matrix
-        //        ecs::NameComponent* nameCom = ecs->GetComponent<ecs::NameComponent>(id);
+        //        ecs::NameComponent* nameCom = m_ecs.GetComponent<ecs::NameComponent>(id);
         //        nameCom->entityName = filename->filename().stem().string();
 
         //        //ADD logic here
 
         //        if (m_prefabSceneMode) {
-        //            hierachy::m_SetParent(ecs->sceneMap.find(m_activeScene)->second.prefabID, id);
+        //            hierachy::m_SetParent(m_ecs.sceneMap.find(m_activeScene)->second.prefabID, id);
         //        }
         //        m_clickedEntityId = id;
         //    }
 
         //    if (filename->filename().extension().string() == ".mpg" || filename->filename().extension().string() == ".mpeg") {
-        //        ecs::EntityID id = ecs->CreateEntity(m_activeScene); //assign to active scene
-        //        ecs::TransformComponent* transCom = ecs->GetComponent<ecs::TransformComponent>(id);
+        //        ecs::EntityID id = m_ecs.CreateEntity(m_activeScene); //assign to active scene
+        //        ecs::TransformComponent* transCom = m_ecs.GetComponent<ecs::TransformComponent>(id);
         //        transCom->WorldTransformation.position = translate;
         //        // Insert matrix
-        //        ecs::NameComponent* nameCom = ecs->GetComponent<ecs::NameComponent>(id);
+        //        ecs::NameComponent* nameCom = m_ecs.GetComponent<ecs::NameComponent>(id);
         //        nameCom->entityName = filename->filename().stem().string();
 
         //        //ADD logic here
 
         //        if (m_prefabSceneMode) {
-        //            hierachy::m_SetParent(ecs->sceneMap.find(m_activeScene)->second.prefabID, id);
+        //            hierachy::m_SetParent(m_ecs.sceneMap.find(m_activeScene)->second.prefabID, id);
         //        }
 
         //        m_clickedEntityId = id;
@@ -395,9 +417,9 @@ void gui::ImGuiHandler::DrawRenderScreenWindow(unsigned int windowWidth, unsigne
         //    if (!m_prefabSceneMode && filename->filename().extension().string() == ".prefab") {//dont allow adding of prefab in prefab 
         //        try {
         //            //check to see if prefab is even loaded
-        //            if (ecs->sceneMap.find(filename->filename().string()) != ecs->sceneMap.end()) {
+        //            if (m_ecs.sceneMap.find(filename->filename().string()) != m_ecs.sceneMap.end()) {
         //                ecs::EntityID id = prefab::m_CreatePrefab(filename->filename().string(), m_activeScene);
-        //                ecs::TransformComponent* transCom = ecs->GetComponent<ecs::TransformComponent>(id);
+        //                ecs::TransformComponent* transCom = m_ecs.GetComponent<ecs::TransformComponent>(id);
         //                transCom->WorldTransformation.position = translate;
         //            }
         //            else {

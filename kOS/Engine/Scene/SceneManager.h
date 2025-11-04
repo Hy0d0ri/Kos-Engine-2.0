@@ -30,6 +30,7 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 #define SCENE_H
 
 #include "Config/pch.h"
+#include "Resources/ResourceManager.h"
 #include "DeSerialization/json_handler.h"
 #include "Events/Delegate.h"
 #include "SceneData.h"
@@ -37,15 +38,23 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 
 namespace scenes {
 
+	struct PathActive {
+		std::filesystem::path path;
+		bool isActive;
+	};
+
 	class SceneManager {
+		ecs::ECS& m_ecs;
+		serialization::Serialization& m_serialization;
+		ResourceManager& m_resourceManager;
+
 	public:
-		SceneManager();
-		static SceneManager* m_GetInstance() {
-			if (!m_InstancePtr) {
-				m_InstancePtr.reset(new SceneManager{});
-			}
-			return m_InstancePtr.get();
-		}
+		SceneManager(ecs::ECS& ecs, serialization::Serialization& slm, ResourceManager& rm):
+			m_ecs(ecs),
+			m_serialization(slm),
+			m_resourceManager(rm)
+		{};
+
 		void Update();
 		bool CreateNewScene(const std::filesystem::path& scenepath);
 
@@ -56,11 +65,13 @@ namespace scenes {
 		void ClearScene(const std::string& scene);
 		void SaveScene(const std::string& scene);
 
-		std::vector<std::filesystem::path> GetAllScenesPath();
+		// first is path, second is isActive
+		std::vector<PathActive> GetAllScenesPath();
+
 		void ClearAllSceneImmediate();
 
 		//Do not call this in the script
-		bool ImmediateLoadScene(const std::filesystem::path& scenepath);
+		bool ImmediateLoadScene(const std::filesystem::path& scenepath, const std::string forcedSceneName = "");
 		//Do not call this in the script
 		void ImmediateClearScene(const std::string& scene);
 
@@ -68,6 +79,12 @@ namespace scenes {
 		void SwapScenes(const std::string& oldscene, const std::string& newscene , ecs::EntityID id);
 
 		void SetSceneActive(const std::string& scene, bool active);
+
+		void CacheCurrentScene();
+		void DeleteAllCacheScenes();
+		bool LoadCacheSceneImmediate(const std::filesystem::path& scene, std::string originalName);
+
+		void LoadSceneToCurrent(const std::string& currentScene, const std::filesystem::path& filepath);
 
 		//void AssignEntityNewScene(const std::string& scene, ecs::EntityID id);
 		//EVENTS
@@ -88,16 +105,10 @@ namespace scenes {
 		std::unordered_map<std::string, std::filesystem::path> unloadScenePath;
 		std::unordered_map<std::string, std::filesystem::path> loadScenePath;
 		std::vector<std::filesystem::path> m_recentFiles;
+		std::vector<std::filesystem::path> cacheScenePath;
 
-		/******************************************************************/
-		/*!
-		\var     static std::unique_ptr<SceneManager> m_InstancePtr
-		\brief   Unique pointer to the singleton instance of SceneManager.
-		*/
-		/******************************************************************/
-		static std::shared_ptr<SceneManager> m_InstancePtr;
 
-		ecs::ECS* m_ecs;
+
 
 	};
 }

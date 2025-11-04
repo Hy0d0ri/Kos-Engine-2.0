@@ -32,25 +32,21 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 #ifndef PHYSICSMANAGER_H
 #define PHYSICSMANAGER_H
 
-#include "Physics/PhysicsEventCallback.h"
-#include "Physics/PhysxUtils.h"
+#include "PhysicsEventCallback.h"
+#include "PhysxUtils.h"
+#include "PhysicsLayer.h"
+#include "Events/Delegate.h"
 
-using namespace ecs;
 using namespace physx;
 
 namespace physics {
+
+
 
 	class PhysicsManager {
 	public:
 		PhysicsManager() = default;  
 		~PhysicsManager() = default;
-
-		static PhysicsManager* GetInstance() {
-			if (!m_instancePtr) {
-				m_instancePtr.reset(new PhysicsManager{});
-			}
-			return m_instancePtr.get();
-		}
 		
 		void Init();
 		void Update(float);
@@ -66,17 +62,18 @@ namespace physics {
 		void AddForce(void*, const glm::vec3&, ForceMode mode = ForceMode::Force);
 		void AddTorque(void*, const glm::vec3&, ForceMode mode = ForceMode::Force);
 
-		bool Raycast(const glm::vec3&, const glm::vec3&, float, RaycastHit&);
+		//bool Raycast(const glm::vec3&, const glm::vec3&, float, RaycastHit&);
+		bool Raycast(const glm::vec3& origin, const glm::vec3& direction, float maxDistance, RaycastHit& outHit, void* actorToIgnore);
 
-		CollisionCallbacks* GetCollisionCallbacks(EntityID entity) { return m_eventCallback->RegisterCollisionCallbacks(entity); }
-		TriggerCallbacks* GetTriggerCallbacks(EntityID entity) { return m_eventCallback->RegisterTriggerCallbacks(entity); }
-		void UnregisterCallbacks(EntityID entity) { m_eventCallback->UnregisterCallbacks(entity); }
+		PhysicsEventCallback* GetEventCallback() const { return m_eventCallback; }
+
+		physicslayer::PhysicsLayer layers;
+
 	private:
 		PhysicsManager(const PhysicsManager&) = delete;
 		PhysicsManager& operator=(const PhysicsManager&) = delete;
 
-		static std::shared_ptr<PhysicsManager> m_instancePtr;
-
+		
 		PxFoundation* m_foundation = nullptr;
 		PxPhysics* m_physics = nullptr;
 		PxScene* m_scene = nullptr;

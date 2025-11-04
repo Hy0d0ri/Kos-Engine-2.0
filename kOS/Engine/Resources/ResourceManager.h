@@ -27,6 +27,7 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 #include "Resources/R_Animation.h"
 #include "Resources/R_Audio.h"
 #include "Resources/R_Material.h"
+#include "Resources/R_DepthMapCube.h"
 class ResourceManager {
 
 public:
@@ -36,34 +37,25 @@ public:
         RegisterResourceType<R_Font>(".fntc");
 		RegisterResourceType<R_Texture>(".dds");
 		RegisterResourceType<R_Scene>(".scene");
-		RegisterResourceType<R_Animation>(".ani");
+		RegisterResourceType<R_Animation>(".anim");
 		RegisterResourceType<R_Audio>(".wav");
 		RegisterResourceType<R_Material>(".mat");
+		RegisterResourceType<R_DepthMapCube>(".dcm");
+		RegisterResourceType<R_DepthMapCube>(".prefab");
         //Wait for texture type
     }
 
 	~ResourceManager() = default;
-
-    static std::shared_ptr<ResourceManager> GetInstance() {
-        if (!m_instancePtr)
-        {
-            m_instancePtr = std::make_shared<ResourceManager>();
-        }
-        return m_instancePtr;
-    }
 
 	void Init(const std::string& Directory) {
 		m_resourceDirectory = Directory;
 	}
 
 
-
-
-
 	template<typename T>
-	std::shared_ptr<T> GetResource(const std::string& GUID) {
+	std::shared_ptr<T> GetResource(const utility::GUID& GUID) {
 		//check if resrouce is already loaded
-		if (GUID.empty()) return nullptr;
+		if (GUID.Empty()) return nullptr;
 
 		if (m_resourceMap.find(GUID) != m_resourceMap.end()) {
 
@@ -73,17 +65,8 @@ public:
 			}
 		}
 
-		std::string className = T::classname();
-
-		//check if resource is registered
-		if (m_resourceExtension.find(className) == m_resourceExtension.end()) {
-			LOGGING_ASSERT_WITH_MSG(className + " : Not registered");
-		}
-
-		//Asset not loaded
-
-        //create file path
-        std::string path = m_resourceDirectory + "/" + className + "/" + GUID + m_resourceExtension.at(className);
+		
+		std::string path = GetResourcePath<T>(GUID);
 
 		//Check if file path exists
 
@@ -100,7 +83,7 @@ public:
 	inline void CollectGarbage() {
 		for (auto it = m_resourceMap.begin(); it != m_resourceMap.end();) {
 			if (it->second.use_count() == 1) {
-				LOGGING_INFO("Unloading Asset UID: " + it->first);
+				LOGGING_INFO("Unloading Asset UID: " + it->first.GetToString());
 				it->second->Unload();
 				it = m_resourceMap.erase(it);
 			}
@@ -108,6 +91,24 @@ public:
 				++it;
 			}
 		}
+	}
+
+
+	template<typename T>
+	std::string GetResourcePath(const utility::GUID& GUID) const {
+		std::string className = T::classname();
+
+		//check if resource is registered
+		if (m_resourceExtension.find(className) == m_resourceExtension.end()) {
+			LOGGING_ERROR(className + " : Not registered");
+		}
+
+		//Asset not loaded
+
+		//create file path
+		std::string path = m_resourceDirectory + "/" + GUID.GetToString() + m_resourceExtension.at(className);
+
+		return path;
 	}
 
 	std::string GetResourceDirectory() const { return m_resourceDirectory; }
@@ -121,12 +122,10 @@ private:
 
 private:
 
-	static std::shared_ptr<ResourceManager> m_instancePtr;
-
 	std::unordered_map<std::string, std::string> m_resourceExtension;
 
 
 	//Key - GUID
-	std::unordered_map<std::string, std::shared_ptr<Resource>> m_resourceMap;
+	std::unordered_map<utility::GUID, std::shared_ptr<Resource>> m_resourceMap;
 	std::string m_resourceDirectory;
 };

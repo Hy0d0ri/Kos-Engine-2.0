@@ -17,7 +17,7 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 /******************************************************************/
 #pragma once
 #include "config/pch.h"
-#include "AssetManager/AssetDatabase.h"
+#include "Editor/Payload.h"
 
 constexpr float sameLineParam = 200.0f; //Padding for the slider
 
@@ -208,20 +208,54 @@ struct DrawComponents {
             _args = buffer;
         }
 
+        if (ImGui::BeginDragDropTarget()) {
+            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("file")) {
+                IM_ASSERT(payload->DataSize == sizeof(AssetPayload));
+                const AssetPayload* data = static_cast<const AssetPayload*>(payload->Data);
+
+                _args = data->path;
+
+            }
+            ImGui::EndDragDropTarget();
+        }
+
+        count++;
+    }
+
+    void operator()(utility::GUID& _args) {
+        ImGui::Text(m_Array[count].c_str());
+        ImGui::SameLine(sameLineParam);
+        std::string title = "##" + m_Array[count];
+
+
+        static char buffer[256];
+        std::strncpy(buffer, _args.GetToString().c_str(), sizeof(buffer));
+        buffer[sizeof(buffer) - 1] = '\0';
+
+        // InputText returns true only when Enter is pressed
+        ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
+        if (ImGui::InputText(title.c_str(), buffer, sizeof(buffer), ImGuiInputTextFlags_EnterReturnsTrue)) {
+            // Update your string only once
+            _args.SetFromString(buffer);
+        }
+
         count++;
 
-		if (ImGui::BeginDragDropTarget()) {
+        if (ImGui::BeginDragDropTarget()) {
             if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("file")) {
-                IM_ASSERT(payload->DataSize == sizeof(AssetPathGUID));
-                const AssetPathGUID* data = static_cast<const AssetPathGUID*>(payload->Data);
+                IM_ASSERT(payload->DataSize == sizeof(AssetPayload));
+                const AssetPayload* data = static_cast<const AssetPayload*>(payload->Data);
 
-                if (std::strlen(data->GUID) == 0)
-                    _args = data->path;
-                else
-                    _args = data->GUID;
+                _args = data->GUID;    
             }
-			ImGui::EndDragDropTarget();
-		}
+            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("EntityPayload")) {
+                IM_ASSERT(payload->DataSize == sizeof(EntityPayload));
+
+                _args = static_cast<const EntityPayload*>(payload->Data)->guid;
+            }
+
+            ImGui::EndDragDropTarget();
+        }
     }
 
     template <typename U>
@@ -304,7 +338,10 @@ public:
 
 template <typename T>
 class EditorActionInvoker : public IEditorActionInvoker {
+    ecs::ECS& m_ecs;
 public:
+	EditorActionInvoker(ecs::ECS& ecs) : m_ecs(ecs) {}
+
     void Draw(void* componentData) override {
         T* component = static_cast<T*>(componentData);
         ecs::EntityID ID = component->entity;
@@ -314,10 +351,10 @@ public:
         if (ImGui::BeginPopupContextItem()) {
             if (T::classname() != ecs::TransformComponent::classname() && ImGui::MenuItem("Delete Component")) {
                 
-                ecs::ECS::GetInstance()->RemoveComponent<T>(ID);
+                m_ecs.RemoveComponent<T>(ID);
             }
             if (ImGui::MenuItem("Reset Component")) {
-                ecs::ECS::GetInstance()->ResetComponent<T>(ID);
+                m_ecs.ResetComponent<T>(ID);
 
 
             }
@@ -333,6 +370,6 @@ public:
 
     void AddComponent(ecs::EntityID ID) override {
 
-        ecs::ECS::GetInstance()->AddComponent<T>(ID);
+        m_ecs.AddComponent<T>(ID);
     }
 };

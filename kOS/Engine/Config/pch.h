@@ -23,6 +23,7 @@
 #include <utility>
 #include <numeric>
 #include <thread>
+#include <future>
 #include <typeindex>
 
 
@@ -43,6 +44,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "Utility/MathUtility.h"
+#include "Utility/Shapes.h"
+#include "Utility/GUID.h"
 
 //DEPENDENCIES
 #include "Debugging/Logging.h"

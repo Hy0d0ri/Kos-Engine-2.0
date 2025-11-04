@@ -42,6 +42,8 @@ public:
 		engineShaders.insert({ "DefaultDraw",Shader(defaultDrawVS, defaultDrawFS) });
 		engineShaders.insert({ "DeferredPBRShader",Shader(deferredPBRVS, deferredPBRFS) });
 		engineShaders.insert({ "GBufferPBRShader",Shader(gBufferPBRVS, gBufferPBRFS) });
+		engineShaders.insert({ "GBufferDebugShader",Shader(gBufferDebugVS, gBufferDebugFS) });
+
 		engineShaders.insert({ "DepthMapShader",Shader(depthMapVS, depthMapFS) });
 		engineShaders.insert({ "SkyBoxShader",Shader(skyBoxVS, skyBoxFS) });
 		engineShaders.insert({ "ScreenFontShader",Shader(screenFontVS, screenFontFS) });
@@ -49,6 +51,8 @@ public:
 		engineShaders.insert({ "FrameBufferShader",Shader(frameBufferVS, frameBufferFS) });
 		engineShaders.insert({ "FBOCompositeShader",Shader(fboCompositeVS, fboCompositeFS) });
 		engineShaders.insert({ "MaterialShader",Shader(materialVS, materialFS) });
+		engineShaders.insert({ "PointShadowShader",Shader(pointShadowVS, pointShadowFS,pointShadowGS) });
+		engineShaders.insert({ "BasicParticleShader", Shader(basicParticleVS,basicParticleFS) });
 
 	}
 
@@ -75,6 +79,20 @@ private:
 	{
 		#include "CoreEngineShaders/Shaders/MaterialShader/MaterialShader.fs"
 	};
+
+	const char* pointShadowVS
+	{
+		#include "CoreEngineShaders/Shaders/PointShadowShader/PointShadowShader.vs"
+	};
+	const char* pointShadowFS
+	{
+		#include "CoreEngineShaders/Shaders/PointShadowShader/PointShadowShader.fs"
+	};
+	const char* pointShadowGS
+	{
+		#include "CoreEngineShaders/Shaders/PointShadowShader/PointShadowShader.gs"
+	};
+
 	const char* frameBufferVS
 	{
 		#include "CoreEngineShaders/Shaders/FrameBuffShader/FrameBuffShader.vs"
@@ -107,6 +125,14 @@ private:
 	{
 		#include "CoreEngineShaders/Shaders/GBuffPBRShader/GBuffPBRShader.fs"
 	};
+	const char* gBufferDebugVS
+	{
+		#include "CoreEngineShaders/Shaders/GBufferDebugShader/GBufferDebugShader.vs"
+	};
+	const char* gBufferDebugFS
+	{
+		#include "CoreEngineShaders/Shaders/GBufferDebugShader/GBufferDebugShader.fs"
+	};
 	const char* depthMapVS
 	{
 		#include "CoreEngineShaders/Shaders/DepthMap/DepthMap.vs"
@@ -138,6 +164,14 @@ private:
 	const char* screenSpriteFS
 	{
 		#include "CoreEngineShaders/Shaders/ScreenSpriteShader/ScreenSpriteShader.fs"
+	};
+	const char* basicParticleVS
+	{
+		#include "CoreEngineShaders/Shaders/BasicParticleShader/BasicParticleShader.vs"
+	};
+	const char* basicParticleFS
+	{
+		#include "CoreEngineShaders/Shaders/BasicParticleShader/BasicParticleShader.fs"
 	};
 
 };

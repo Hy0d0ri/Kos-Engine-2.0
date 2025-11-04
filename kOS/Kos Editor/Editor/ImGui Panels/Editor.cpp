@@ -33,6 +33,8 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 #include "implot_internal.h"
 #include "ImGuiStyle.h"
 
+#include "Configs/ConfigPath.h"
+
 #include "Editor.h"
 #include "Editor/EditorCamera.h"
 #include "Inputs/Input.h"
@@ -50,14 +52,14 @@ namespace gui {
 		onSaveAll.Add([&](const std::string& scene) {
 
 			if (scene.empty()) {
-				scenes::SceneManager::m_GetInstance()->SaveAllActiveScenes(true);
+				m_sceneManager.SaveAllActiveScenes(true);
 			}
 			else {
-				scenes::SceneManager::m_GetInstance()->SaveScene(scene);
+				m_sceneManager.SaveScene(scene);
 			}
 			
 			if (m_prefabSceneMode) {
-				prefab::UpdateAllPrefab(m_activeScene);
+				m_prefabManager.UpdateAllPrefab(m_activeScene);
 			}
 
 
@@ -65,19 +67,11 @@ namespace gui {
 
 	}
 
-	ImGuiHandler::ImGuiHandler(Application::AppWindow& window) :m_window(window) {
-
-		m_ecs = ecs::ECS::GetInstance();
-		RegisterCallBack();
-
-
-
-	} //CTORdoing 
-
-	ImGuiHandler::~ImGuiHandler() {} //Destructor
 
 	void ImGuiHandler::Initialize(GLFWwindow* window, const char* glsl_version, const std::string& editorTagsFile, const std::string& imguiINI)
 	{
+
+
 		m_imgui_layout = imguiINI;
 		//set up reflection
 
@@ -104,9 +98,13 @@ namespace gui {
 		RegisterComponent<ecs::ScriptComponent>();
 		RegisterComponent<ecs::AudioComponent>();
 		RegisterComponent<ecs::OctreeGeneratorComponent>();
+		RegisterComponent<ecs::PathfinderComponent>();
+		RegisterComponent<ecs::PathfinderTargetComponent>();
 		RegisterComponent<ecs::CubeRendererComponent>();
 		RegisterComponent<ecs::ParticleComponent>();
+		RegisterComponent<ecs::AnimatorComponent>();
 
+		RegisterComponent<ecs::SphereRendererComponent>();
 		RegisterComponent<ecs::MaterialComponent>();
 		//Allocate to map
 		EditorComponentTypeRegistry::CreateAllDrawers(componentDrawers);
@@ -126,24 +124,23 @@ namespace gui {
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;// Enable Docking
 		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;// Enable Multi-Viewport / Platform Windows
 
-		SetStyle();
+		DeserializeProfile();
 
 		// Setup Platform/Renderer bindings
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
 		ImGui_ImplOpenGL3_Init(glsl_version);
 
-
 		// load current layout
 		LoadLayout();
 
 		// Load Prefabs into scenes
-		prefab::LoadAllPrefabs();
+		m_prefabManager.LoadAllPrefabs();
 
 		//load scene
 		openAndLoadSceneDialog();
 
 		//set first active scene
-		for (auto& scene : m_ecs->sceneMap) {
+		for (auto& scene : m_ecs.sceneMap) {
 			if (!scene.second.isPrefab) {
 				m_activeScene = scene.first;
 				break;
@@ -169,7 +166,7 @@ namespace gui {
 
 		NewFrame();
 
-		if (Input::InputSystem::GetInstance()->IsKeyTriggered(keys::F11))
+		if (m_input.IsKeyTriggered(keys::F11))
 		{
 
 		}
@@ -187,12 +184,10 @@ namespace gui {
 			//update while prefabmode is on
 			m_UpdateOnPrefabMode();
 
-			ecs::ECS* ecs = ecs::ECS::GetInstance();
-
 			//check if "m_activeScene", if not find first active scene
-			const auto& scene = ecs->sceneMap.find(m_activeScene);
-			if (scene == ecs->sceneMap.end()) {
-				for (auto& _scene : ecs->sceneMap) {
+			const auto& scene = m_ecs.sceneMap.find(m_activeScene);
+			if (scene == m_ecs.sceneMap.end()) {
+				for (auto& _scene : m_ecs.sceneMap) {
 					if (!_scene.second.isPrefab) {
 						m_activeScene = _scene.first;
 						_scene.second.isActive = true;
@@ -201,7 +196,7 @@ namespace gui {
 			}
 
 			//check if selected entityid is loaded
-			if (ecs->GetEntitySignatureData().find(m_clickedEntityId) == ecs->GetEntitySignatureData().end()) {
+			if (m_ecs.GetEntitySignatureData().find(m_clickedEntityId) == m_ecs.GetEntitySignatureData().end()) {
 				m_clickedEntityId = -1;
 			}
 
@@ -223,13 +218,14 @@ namespace gui {
 				DrawInputWindow();
 				DrawContentBrowser();
 				DrawRenderScreenWindow(static_cast<unsigned int>(m_window.windowWidth), static_cast<unsigned int>(m_window.windowHeight));
-				DrawGameSceneWindow();
+				DrawGameSceneWindow(static_cast<unsigned int>(m_window.windowWidth), static_cast<unsigned int>(m_window.windowHeight));
 				DrawPerformanceWindow();
 				DrawPreferencesWindow();
 				DrawAnimationWindow();
 				DrawAudioMixerWindow();
 				DrawAssetInspector();
 				DrawMaterialWindow();
+				DrawBakedWindow();
 			}
 
 		}
@@ -238,7 +234,7 @@ namespace gui {
 		EditorCamera::editorCamera.CalculatePerspMtx();
 		EditorCamera::editorCamera.CalculateViewMtx();
 		EditorCamera::editorCamera.CalculateUIOrthoMtx();
-		GraphicsManager::GetInstance()->gm_MoveEditorCameraData(EditorCamera::editorCamera);
+		m_graphicsManager.gm_MoveEditorCameraData(EditorCamera::editorCamera);
 	}
 
 	void ImGuiHandler::Render()
@@ -279,10 +275,9 @@ namespace gui {
 	{
 		if (!EditorCamera::m_editorMode)return;
 
-		scenes::SceneManager* scenemanager = scenes::SceneManager::m_GetInstance();
 		ImGuiIO& io = ImGui::GetIO();  // Get input/output data
 		//If CTRL + S press, save
-		if (io.KeyCtrl && ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_S)) && (m_ecs->GetState() != ecs::RUNNING)) {
+		if (io.KeyCtrl && ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_S)) && (m_ecs.GetState() != ecs::RUNNING)) {
 
 			onSaveAll.Invoke("");
 		}
@@ -291,24 +286,22 @@ namespace gui {
 
 	void ImGuiHandler::openAndLoadSceneDialog()
 	{
-		scenes::SceneManager* scenemanager = scenes::SceneManager::m_GetInstance();
-		auto assetManager = AssetManager::GetInstance();
 
-		assetManager->GetAssetWatcher()->Pause();
+		m_assetManager.GetAssetWatcher()->Pause();
 
 		//char filePath[MAX_PATH];
-		std::filesystem::path path = filewindow::m_OpenfileDialog(AssetManager::GetInstance()->GetAssetManagerDirectory().c_str());
+		std::filesystem::path path = filewindow::m_OpenfileDialog(m_assetManager.GetAssetManagerDirectory().c_str());
 		if (!path.empty() && (path.filename().extension().string() == ".json")) {
-			ecs::ECS::GetInstance()->SetState(ecs::STOP);
+			m_ecs.SetState(ecs::STOP);
 			//clear all other scenes
-			scenemanager->ClearAllScene();
-			scenemanager->LoadScene(path);
+			m_sceneManager.ClearAllScene();
+			m_sceneManager.LoadScene(path);
 
 			if (!m_prefabSceneMode) {
 				m_activeScene = path.filename().string();
 			}
 			else {
-				ecs::ECS::GetInstance()->sceneMap.find(path.filename().string())->second.isActive = false;
+				m_ecs.sceneMap.find(path.filename().string())->second.isActive = false;
 				m_savedSceneState[path.filename().string()] = true;
 			}
 			m_clickedEntityId = -1;
@@ -316,7 +309,7 @@ namespace gui {
 		else {
 			LOGGING_POPUP("No Scene loaded");
 		}
-		assetManager->GetAssetWatcher()->Resume();
+		m_assetManager.GetAssetWatcher()->Resume();
 	}
 
 	bool containsSubstring(const std::string& x, const std::string& y) {
@@ -330,5 +323,7 @@ namespace gui {
 		// Check if the lowercase version of y is found in x
 		return lower_x.find(lower_y) != std::string::npos;
 	}
+
+
 }
 

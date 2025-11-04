@@ -8,23 +8,15 @@ class AssetManager {
 
 public:
 
-    static AssetManager* GetInstance() {
-        if (!m_instancePtr)
-        {
-            m_instancePtr = std::make_shared<AssetManager>();
-        }
-        return m_instancePtr.get();
-    }
-
     AssetManager();
 
     ~AssetManager();
 
     void Init(const std::string& assetDirectory, const std::string& resourceDirectory);
 
-    void RegisterAsset(const std::filesystem::path& filepath);
+    utility::GUID RegisterAsset(const std::filesystem::path& filepath);
 
-    void Compilefile(const std::filesystem::path& filepath, const std::string& outputExtension);
+    std::future<void> Compilefile(const std::filesystem::path& filepath);
 
     inline std::string GetTypefromExtension(std::string extension) {
         if (m_extensionRegistry.find(extension) == m_extensionRegistry.end()) {
@@ -35,22 +27,21 @@ public:
         return m_extensionRegistry.at(extension);
     }
 
-    inline std::string GetGUIDfromFilePath(std::filesystem::path filepath) {
+    inline utility::GUID GetGUIDfromFilePath(std::filesystem::path filepath) {
 
-        std::string GUID;
+        utility::GUID GUID;
         try {
             GUID = m_dataBase.GetGUID(filepath);
         }
         catch (const std::runtime_error& e) {
             LOGGING_WARN("Runtime error: " + std::string(e.what()));
-            return std::string{};
+            return  utility::GUID();
         }
 
         return GUID;
     }
 
 	std::string GetAssetManagerDirectory() const { return m_assetDirectory; }
-
 
 
     Watcher* GetAssetWatcher() {
@@ -72,10 +63,8 @@ private:
 
 private:
 
-    static std::shared_ptr<AssetManager> m_instancePtr;
-
     //Key - GUID
-    std::unordered_map <std::string, std::filesystem::path> m_GUIDtoFilePath;
+    std::unordered_map <utility::GUID, std::filesystem::path> m_GUIDtoFilePath;
 
     //extension registry
     std::unordered_map<std::string, std::string> m_extensionRegistry;

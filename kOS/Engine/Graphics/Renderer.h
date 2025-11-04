@@ -35,7 +35,9 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 #include "UIElements.h"
 #include "Model.h"
 #include "Camera.h"
+#include "Particle.h"
 #include <vector>
+#include "CubeMap.h"
 
 struct BasicRenderer
 {
@@ -62,13 +64,24 @@ struct CubeRenderer : BasicRenderer
 	struct CubeData {
 		PBRMaterial meshMaterial;
 		glm::mat4 transformation{ 1.f };
-		unsigned int entityID{ 0 };
+		int entityID{ -1 };
 	};
 	void Render(const CameraData& camera, Shader& shader, Cube* cubePtr);
 	void Clear();
 	std::vector<CubeData> cubesToDraw{};
 };
+struct SphereRenderer:BasicRenderer
+{
+	struct SphereData {
+		PBRMaterial meshMaterial;
+		glm::mat4 transformation{ 1.f };
+		int entityID{ -1 };
+	};
+	void Render(const CameraData& camera, Shader& shader, Sphere* cubePtr);
+	void Clear();
+	std::vector<SphereData> spheresToDraw{};
 
+};
 struct TextRenderer : BasicRenderer
 {
 	void InitializeTextRendererMeshes();
@@ -92,12 +105,16 @@ private:
 
 struct LightRenderer : BasicRenderer
 {
+	void InitializeLightRenderer();
+	void UpdateDCM();
 	void RenderAllLights(const CameraData& camera, Shader& shader);
 	void DebugRender(const CameraData& camera, Shader& shader);
 	void Clear() override;
 	std::vector<PointLightData> pointLightsToDraw{};
 	std::vector<DirectionalLightData> directionLightsToDraw{};
 	std::vector<SpotLightData> spotLightsToDraw{};
+	DepthCubeMap dcm[16];
+	DepthCubeMap testDCM;
 };
 struct DebugRenderer : BasicRenderer {
 
@@ -106,14 +123,29 @@ struct DebugRenderer : BasicRenderer {
 	void RenderPointLightDebug(const CameraData& camera, Shader& shader, std::vector<PointLightData> pointLights);
 	void RenderDebugFrustums(const CameraData& camera, Shader& shader, const std::vector<CameraData>& debugFrustums);
 	void RenderDebugCubes(const CameraData& camera, Shader& shader);
+	void RenderDebugCapsules(const CameraData& camera, Shader& shader);
+	void RenderDebugSpheres(const CameraData& camera, Shader& shader);
 	void Clear() override;
 
 	std::vector<BasicDebugData> basicDebugCubes{};
 	std::vector<BasicDebugData> basicDebugCapsules{};
-	std::vector<BasicDebugData> basicDebugSpherers{};
+	std::vector<BasicDebugData> basicDebugSpheres{};
 
 private:
 	DebugCircle debugCircle;
 	DebugFrustum debugFrustum;
 	DebugCube debugCube;
+	DebugCapsule debugCapsule;
 };
+
+struct ParticleRenderer : BasicRenderer {
+	void InitializeParticleRendererMeshes();
+	void Render(const CameraData& camera, Shader& shader);
+	void Clear() override;
+	std::vector<BasicParticleData> particlesToDraw{};
+	std::vector<BasicParticleInstance> instancedBasicParticles{};
+
+private:
+	BasicParticleMesh basicParticleMesh;
+};
+

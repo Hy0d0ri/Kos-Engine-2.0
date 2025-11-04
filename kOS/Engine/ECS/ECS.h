@@ -18,11 +18,10 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 
 #include "Config/pch.h"
 
-#include "Layers.h"
 #include "ECSList.h"
 #include "Scene/SceneData.h"
 
-#include "ECS/Component/ComponentHeader.h"
+
 #include "ECS/Component/Component.h"
 #include "ECS/System/System.h"
 #include "ECS/System/SystemHeader.h"
@@ -32,25 +31,40 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 #include "Reflection/IReflectionInvoker.h"
 #include "Reflection/DeepCopy.h"
 
+//Dependency Injection Forward Declaration
+#include "Debugging/Performance.h"
+#include "Graphics/GraphicsManager.h"
+#include "Resources/ResourceManager.h"
+#include "Inputs/Input.h"
+#include "Physics/PhysicsManager.h"
+#include "Scene/SceneManager.h"
+#include "Scripting/ScriptManager.h"
 
 
 namespace ecs {
 
 
 	class ECS {
-
 	private:
-
-		ECS() = default;
+		//Dependency Injection
+		Peformance& m_performance;
+		GraphicsManager& m_graphicsManager;
+		ResourceManager& m_resourceManager;
+		Input::InputSystem& m_inputSystem;
+		physics::PhysicsManager& m_physicsManager;
+		ScriptManager& m_scriptManager;
 
 	public:
-		//singleton
-		static ECS* GetInstance() {
-			if (!m_InstancePtr) {
-				m_InstancePtr.reset(new ECS{});
-			}
-			return m_InstancePtr.get();
-		}
+
+
+		ECS(Peformance& peformance, GraphicsManager& graphics, ResourceManager& rm, Input::InputSystem& is, physics::PhysicsManager& pm, ScriptManager& sm) :
+			m_performance(peformance),
+			m_graphicsManager(graphics),
+			m_resourceManager(rm),
+			m_inputSystem(is),
+			m_physicsManager(pm),
+			m_scriptManager(sm)
+		{}
 
 		void Load();
 		void Init();
@@ -74,6 +88,18 @@ namespace ecs {
 		template <typename T>
 		void ResetComponent(EntityID ID);
 
+		//Hierachy Logic
+
+		void SetParent(EntityID parent, EntityID child, bool updateTransform = false);
+
+		void RemoveParent(EntityID child, bool updateTransform = false);
+
+		std::optional<EntityID> GetParent(EntityID child);
+
+		std::optional<std::vector<EntityID>> GetChild(EntityID parent);
+
+
+
 
 		template <typename T>
 		T GetIComponent(const std::string& componentName, EntityID ID);
@@ -96,6 +122,23 @@ namespace ecs {
 		}
 
 		//ENTITY DATA GETTERS
+		void InsertGUID(const utility::GUID& guid, ecs::EntityID id) {
+			m_GUIDtoEntityID.insert({ guid, id });
+		}
+
+		void DeleteGUID(const utility::GUID& guid) {
+			if (guid.Empty()) return;
+			m_GUIDtoEntityID.erase(guid);
+		}
+
+		int GetEntityIDFromGUID(const utility::GUID& guid) {
+			if(m_GUIDtoEntityID.find(guid) == m_GUIDtoEntityID.end()) {
+				return -1;
+			}
+			
+			return static_cast<int>(m_GUIDtoEntityID.at(guid));
+		}
+
 		ComponentSignature GetEntitySignature(EntityID ID) {
 			return m_entityMap.at(ID);
 		}
@@ -107,7 +150,7 @@ namespace ecs {
 			sceneMap[sceneName] = sceneData;
 		}
 
-		const SceneData& GetSceneData(const std::string& sceneName) {
+		SceneData& GetSceneData(const std::string& sceneName) {
 			return sceneMap.at(sceneName);
 		}
 
@@ -118,11 +161,9 @@ namespace ecs {
 		std::string GetSceneByEntityID(ecs::EntityID entityID);
 
 
+
 		//SCENE DATA
 		std::unordered_map<std::string, SceneData> sceneMap{};
-
-		//LAYER DATA
-		layer::LayerStack layersStack;
 
 		//GAME STATE DATA
 		GAMESTATE GetState() { return m_state; }
@@ -146,6 +187,8 @@ namespace ecs {
 		void RegisterEntity(EntityID);
 		void DeregisterEntity(EntityID);
 
+		
+
 	private:
 		//modify from set next state
 		GAMESTATE m_nextState{ STOP };
@@ -167,8 +210,9 @@ namespace ecs {
 		std::unordered_map<EntityID, ComponentSignature> m_entityMap;
 		EntityID m_entityCount{};
 		std::stack<EntityID> m_availableEntityID;
+		std::unordered_map<utility::GUID, ecs::EntityID> m_GUIDtoEntityID;
 
-		static std::shared_ptr<ECS> m_InstancePtr;
+
 	};
 
 	#include "Reflection/ReflectionInvoker.h" //this stays after ecs class and before component type registry, HEADER HELL
@@ -227,7 +271,7 @@ namespace ecs {
 		// reversed order expansion
 		(..., signature.set(GetComponentKey(Components::classname())));
 
-		m_systemMap[T::classname()] = std::make_shared<T>();
+		m_systemMap[T::classname()] = std::make_shared<T>(*this, m_graphicsManager, m_resourceManager, m_inputSystem, m_physicsManager, m_scriptManager, m_performance);
 		m_systemMap[T::classname()]->AssignSignature(signature);
 
 		std::bitset<GAMESTATE_COUNT> gameState;
@@ -331,8 +375,10 @@ namespace ecs {
 	template <typename T>
 	void ECS::ResetComponent(EntityID ID)
 	{
-		m_combinedComponentPool.at(T::classname())->Delete(ID);
-		std::static_pointer_cast<SparseSet<T>>(m_combinedComponentPool.at(T::classname()))->Set(ID, T());
+		T* Component = GetComponent<T>(ID);
+		T EmptyComponent;
+		DeepCopyComponents<T> duplicator;
+		Component->ApplyFunctionPairwise(duplicator, EmptyComponent);
 	}
 
 	template <typename T>

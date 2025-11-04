@@ -12,10 +12,10 @@ namespace ecs {
 	class ScriptingSystem : public ISystem {
 
 	public:
-
+		using ISystem::ISystem;
 
 		void Init() override;
-		void Update(const std::string&) override;
+		void Update() override;
 
 		REFLECTABLE(ScriptingSystem)
 	private:

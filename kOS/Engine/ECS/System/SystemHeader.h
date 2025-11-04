@@ -1,6 +1,5 @@
 #pragma once
 
-#include "RenderSystem.h"
 #include "TransformSystem.h"
 #include "CameraSystem.h"
 #include "AudioSystem.h"
@@ -14,8 +13,11 @@
 #include "CharacterControllerSystem.h"
 #include "LightingSystem.h"
 #include "DebugBoxColliderRenderSystem.h"
+#include "DebugCapsuleColliderRenderSystem.h"
+#include "DebugSphereColliderRenderSystem.h"
 #include "ScriptingSystem.h"
 #include "PathfindingSystem.h"
 #include "CubeRenderSystem.h"
+#include "SphereRenderSystem.h"
 #include "PhysicsSystem.h"
 #include "ParticleSystem.h"

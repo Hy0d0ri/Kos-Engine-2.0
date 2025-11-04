@@ -1,12 +1,12 @@
 [
     {
         "SceneData": {
-            "collisionData": "000000000|001000100|010000000|000000000|000001000|000010000|010000000|000000000|000000000|",
             "skyBoxGUID": [],
             "ambientIntensity": 1.0
         }
     },
     {
+        "entityGUID": "978d8499-566d-c56d-74db-07f1915e2dd9",
         "NameComponent": {
             "entityName": "testing123",
             "Layer": 0,
@@ -53,12 +53,13 @@
         }
     },
     {
+        "entityGUID": "60ee2bd8-eefe-d9d9-be2e-b7605da2b744",
         "LightComponent": {
-            "lightType": 0,
+            "lightType": 1,
             "color": {
-                "x": 1.0,
+                "x": 0.8999999761581421,
                 "y": 1.2000000476837158,
-                "z": 4.300000190734863
+                "z": 3.799999952316284
             },
             "diffuseStrength": {
                 "x": 1.0,
@@ -70,15 +71,19 @@
                 "y": 1.0,
                 "z": 1.0
             },
-            "linear": 0.49000000953674316,
-            "quadratic": 0.23000000417232513,
+            "linear": 0.09000000357627869,
+            "quadratic": 0.03200000151991844,
             "direction": {
-                "x": 0.0,
-                "y": 90.0,
-                "z": 0.0
+                "x": -0.5,
+                "y": 0.0,
+                "z": -12.800000190734863
             },
             "cutOff": 5.5,
-            "outerCutOff": 10.5
+            "outerCutOff": 87.5999984741211,
+            "intesnity": 150.10000610351563,
+            "shadowCast": true,
+            "bakedLighting": false,
+            "depthMapGUID": "ac7f4064-9a1b-9b28-4c5a-68a755864cbe"
         },
         "NameComponent": {
             "entityName": "test light",
@@ -92,8 +97,8 @@
             "WorldTransformation": {
                 "position": {
                     "x": 0.0,
-                    "y": 0.0,
-                    "z": 0.0
+                    "y": -6.443936347961426,
+                    "z": 13.263818740844727
                 },
                 "rotation": {
                     "x": 0.0,
@@ -109,12 +114,12 @@
             "LocalTransformation": {
                 "position": {
                     "x": 0.0,
-                    "y": 0.0,
-                    "z": 0.0
+                    "y": -6.443936347961426,
+                    "z": 13.263818740844727
                 },
                 "rotation": {
                     "x": 0.0,
-                    "y": 0.0,
+                    "y": -0.0,
                     "z": 0.0
                 },
                 "scale": {
@@ -126,6 +131,89 @@
         }
     },
     {
+        "entityGUID": "cbbbf019-49e5-0051-9f15-2d2f068ddca2",
+        "AudioComponent": {
+            "audioFiles": [
+                {
+                    "audioGUID": "24a5edf7-efac-9bb6-0644-ef7909f212bc",
+                    "volume": 1.0,
+                    "loop": true,
+                    "playOnStart": true,
+                    "hasPlayed": false,
+                    "pan": 0.0,
+                    "isBGM": false,
+                    "isSFX": true
+                }
+            ]
+        },
+        "MaterialComponent": {
+            "materialGUID": "61cfd855-ca21-6e2a-3bf8-8fc94756f547"
+        },
+        "MeshFilterComponent": {
+            "meshGUID": "ee1ad3b9-e869-074a-fe25-b15ac13d76d0"
+        },
+        "MeshRendererComponent": {
+            "diffuseMaterialGUID": "4d8deac8-5e30-9e34-6f12-37721db6eb53",
+            "specularMaterialGUID": "3835eca5-ca41-66f9-c046-aae5ed607e56",
+            "normalMaterialGUID": "dc87b22b-a90f-e566-c503-d27ea05bc74a",
+            "ambientOcclusionMaterialGUID": "7e3bc79c-83cb-41b9-aa01-6076a018d1e8",
+            "roughnessMaterialGUID": "21e73a5d-3a17-aa8c-8e08-2ec4d5ae7320"
+        },
+        "NameComponent": {
+            "entityName": "BackpackTest",
+            "Layer": 0,
+            "entityTag": "Default",
+            "isPrefab": false,
+            "prefabName": "",
+            "hide": false
+        },
+        "PlayerScript": {
+            "health": 0,
+            "shield": 0,
+            "healthbool": false,
+            "shield2": "",
+            "Targetguid": "00000000-0000-0000-0000-000000000000",
+            "prefabGUID": "00000000-0000-0000-0000-000000000000"
+        },
+        "TransformComponent": {
+            "WorldTransformation": {
+                "position": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": -0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 0.10000000149011612,
+                    "y": 0.10000000149011612,
+                    "z": 0.10000000149011612
+                }
+            },
+            "LocalTransformation": {
+                "position": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": -0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 0.10000000149011612,
+                    "y": 0.10000000149011612,
+                    "z": 0.10000000149011612
+                }
+            }
+        }
+    },
+    {
+        "entityGUID": "4c517708-7bc5-97c5-3e4f-3df53f084315",
         "CameraComponent": {
             "cameraType": 0,
             "fov": 45.0,
@@ -188,6 +276,7 @@
         }
     },
     {
+        "entityGUID": "2f2b146a-87ad-22d4-fe32-88d269a42a7a",
         "BoxColliderComponent": {
             "isTrigger": false,
             "box": {
@@ -255,7 +344,7 @@
                 },
                 "rotation": {
                     "x": 0.0,
-                    "y": -0.0,
+                    "y": 0.0,
                     "z": 0.0
                 },
                 "scale": {
@@ -267,6 +356,7 @@
         }
     },
     {
+        "entityGUID": "dbaa3909-b963-abce-3a67-216bdf46bf2b",
         "CanvasRendererComponent": {
             "isScreenSpace": true
         },
@@ -276,7 +366,7 @@
             "entityTag": "Default",
             "isPrefab": false,
             "prefabName": "",
-            "hide": true
+            "hide": false
         },
         "TransformComponent": {
             "WorldTransformation": {
@@ -316,13 +406,14 @@
         },
         "children": [
             {
+                "entityGUID": "728efec8-6077-dfdf-4450-d6ca27095031",
                 "NameComponent": {
                     "entityName": "text",
                     "Layer": 0,
                     "entityTag": "Default",
                     "isPrefab": false,
                     "prefabName": "",
-                    "hide": true
+                    "hide": false
                 },
                 "TextComponent": {
                     "fontGUID": "c5c95e70-84b4-24b2-d68f-801ffb4b5105",
@@ -372,13 +463,14 @@
                 }
             },
             {
+                "entityGUID": "f9702f19-9bb0-3bdb-dd31-e8b309cc4c1f",
                 "NameComponent": {
                     "entityName": "sprite test",
                     "Layer": 0,
                     "entityTag": "Default",
                     "isPrefab": false,
                     "prefabName": "",
-                    "hide": true
+                    "hide": false
                 },
                 "SpriteComponent": {
                     "spriteGUID": "4d8deac8-5e30-9e34-6f12-37721db6eb53",
@@ -429,8 +521,15 @@
         ]
     },
     {
+        "entityGUID": "49e12cda-8e58-a39e-de9f-f08e9dfad6f9",
+        "MaterialComponent": {
+            "materialGUID": "61cfd855-ca21-6e2a-3bf8-8fc94756f547"
+        },
+        "MeshFilterComponent": {
+            "meshGUID": "00000000-0000-0000-0000-000000000000"
+        },
         "NameComponent": {
-            "entityName": "Backpack Holder",
+            "entityName": "TestGun",
             "Layer": 0,
             "entityTag": "Default",
             "isPrefab": false,
@@ -472,236 +571,56 @@
                     "z": 1.0
                 }
             }
+        }
+    },
+    {
+        "entityGUID": "bbd4ddb4-aefa-85dd-10e3-8eb84494266b",
+        "MaterialComponent": {
+            "materialGUID": "61cfd855-ca21-6e2a-3bf8-8fc94756f547"
         },
-        "children": [
-            {
-                "AudioComponent": {
-                    "audioFiles": [
-                        {
-                            "audioGUID": "24a5edf7-efac-9bb6-0644-ef7909f212bc",
-                            "volume": 1.0,
-                            "loop": true,
-                            "playOnStart": true,
-                            "hasPlayed": false,
-                            "pan": 0.0,
-                            "isBGM": false,
-                            "isSFX": true
-                        }
-                    ]
+        "NameComponent": {
+            "entityName": "TestSphere",
+            "Layer": 0,
+            "entityTag": "Default",
+            "isPrefab": false,
+            "prefabName": "",
+            "hide": false
+        },
+        "TransformComponent": {
+            "WorldTransformation": {
+                "position": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
                 },
-                "MeshFilterComponent": {
-                    "meshGUID": "ee1ad3b9-e869-074a-fe25-b15ac13d76d0"
+                "rotation": {
+                    "x": 0.0,
+                    "y": -0.0,
+                    "z": 0.0
                 },
-                "MeshRendererComponent": {
-                    "diffuseMaterialGUID": "4d8deac8-5e30-9e34-6f12-37721db6eb53",
-                    "specularMaterialGUID": "3835eca5-ca41-66f9-c046-aae5ed607e56",
-                    "normalMaterialGUID": "dc87b22b-a90f-e566-c503-d27ea05bc74a",
-                    "ambientOcclusionMaterialGUID": "7e3bc79c-83cb-41b9-aa01-6076a018d1e8",
-                    "roughnessMaterialGUID": "21e73a5d-3a17-aa8c-8e08-2ec4d5ae7320"
-                },
-                "NameComponent": {
-                    "entityName": "BackpackTest",
-                    "Layer": 0,
-                    "entityTag": "Default",
-                    "isPrefab": true,
-                    "prefabName": "BackpackTest.prefab",
-                    "hide": false
-                },
-                "PlayerScript": {
-                    "health": 0,
-                    "shield": 0,
-                    "healthbool": false,
-                    "shield2": ""
-                },
-                "TransformComponent": {
-                    "WorldTransformation": {
-                        "position": {
-                            "x": -35.0,
-                            "y": 0.0,
-                            "z": 0.0
-                        },
-                        "rotation": {
-                            "x": 0.0,
-                            "y": -0.0,
-                            "z": 0.0
-                        },
-                        "scale": {
-                            "x": 0.10000000149011612,
-                            "y": 0.10000000149011612,
-                            "z": 0.10000000149011612
-                        }
-                    },
-                    "LocalTransformation": {
-                        "position": {
-                            "x": -35.0,
-                            "y": 0.0,
-                            "z": 0.0
-                        },
-                        "rotation": {
-                            "x": 0.0,
-                            "y": -0.0,
-                            "z": 0.0
-                        },
-                        "scale": {
-                            "x": 0.10000000149011612,
-                            "y": 0.10000000149011612,
-                            "z": 0.10000000149011612
-                        }
-                    }
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
                 }
             },
-            {
-                "AudioComponent": {
-                    "audioFiles": [
-                        {
-                            "audioGUID": "24a5edf7-efac-9bb6-0644-ef7909f212bc",
-                            "volume": 1.0,
-                            "loop": true,
-                            "playOnStart": true,
-                            "hasPlayed": false,
-                            "pan": 0.0,
-                            "isBGM": false,
-                            "isSFX": true
-                        }
-                    ]
+            "LocalTransformation": {
+                "position": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
                 },
-                "MeshFilterComponent": {
-                    "meshGUID": "ee1ad3b9-e869-074a-fe25-b15ac13d76d0"
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
                 },
-                "MeshRendererComponent": {
-                    "diffuseMaterialGUID": "4d8deac8-5e30-9e34-6f12-37721db6eb53",
-                    "specularMaterialGUID": "3835eca5-ca41-66f9-c046-aae5ed607e56",
-                    "normalMaterialGUID": "dc87b22b-a90f-e566-c503-d27ea05bc74a",
-                    "ambientOcclusionMaterialGUID": "7e3bc79c-83cb-41b9-aa01-6076a018d1e8",
-                    "roughnessMaterialGUID": "21e73a5d-3a17-aa8c-8e08-2ec4d5ae7320"
-                },
-                "NameComponent": {
-                    "entityName": "BackpackTest",
-                    "Layer": 0,
-                    "entityTag": "Default",
-                    "isPrefab": true,
-                    "prefabName": "BackpackTest.prefab",
-                    "hide": false
-                },
-                "PlayerScript": {
-                    "health": 10,
-                    "shield": 20,
-                    "healthbool": false,
-                    "shield2": ""
-                },
-                "TransformComponent": {
-                    "WorldTransformation": {
-                        "position": {
-                            "x": 0.0,
-                            "y": 0.0,
-                            "z": 0.0
-                        },
-                        "rotation": {
-                            "x": 0.0,
-                            "y": -0.0,
-                            "z": 0.0
-                        },
-                        "scale": {
-                            "x": 0.10000000149011612,
-                            "y": 0.10000000149011612,
-                            "z": 0.10000000149011612
-                        }
-                    },
-                    "LocalTransformation": {
-                        "position": {
-                            "x": 0.0,
-                            "y": 0.0,
-                            "z": 0.0
-                        },
-                        "rotation": {
-                            "x": 0.0,
-                            "y": -0.0,
-                            "z": 0.0
-                        },
-                        "scale": {
-                            "x": 0.10000000149011612,
-                            "y": 0.10000000149011612,
-                            "z": 0.10000000149011612
-                        }
-                    }
-                }
-            },
-            {
-                "AudioComponent": {
-                    "audioFiles": [
-                        {
-                            "audioGUID": "24a5edf7-efac-9bb6-0644-ef7909f212bc",
-                            "volume": 1.0,
-                            "loop": true,
-                            "playOnStart": true,
-                            "hasPlayed": false,
-                            "pan": 0.0,
-                            "isBGM": false,
-                            "isSFX": true
-                        }
-                    ]
-                },
-                "MeshFilterComponent": {
-                    "meshGUID": "ee1ad3b9-e869-074a-fe25-b15ac13d76d0"
-                },
-                "MeshRendererComponent": {
-                    "diffuseMaterialGUID": "4d8deac8-5e30-9e34-6f12-37721db6eb53",
-                    "specularMaterialGUID": "3835eca5-ca41-66f9-c046-aae5ed607e56",
-                    "normalMaterialGUID": "dc87b22b-a90f-e566-c503-d27ea05bc74a",
-                    "ambientOcclusionMaterialGUID": "7e3bc79c-83cb-41b9-aa01-6076a018d1e8",
-                    "roughnessMaterialGUID": "21e73a5d-3a17-aa8c-8e08-2ec4d5ae7320"
-                },
-                "NameComponent": {
-                    "entityName": "BackpackTest",
-                    "Layer": 0,
-                    "entityTag": "Default",
-                    "isPrefab": true,
-                    "prefabName": "BackpackTest.prefab",
-                    "hide": false
-                },
-                "PlayerScript": {
-                    "health": 10,
-                    "shield": 20,
-                    "healthbool": false,
-                    "shield2": ""
-                },
-                "TransformComponent": {
-                    "WorldTransformation": {
-                        "position": {
-                            "x": 35.0,
-                            "y": 0.0,
-                            "z": 0.0
-                        },
-                        "rotation": {
-                            "x": 0.0,
-                            "y": -0.0,
-                            "z": 0.0
-                        },
-                        "scale": {
-                            "x": 0.10000000149011612,
-                            "y": 0.10000000149011612,
-                            "z": 0.10000000149011612
-                        }
-                    },
-                    "LocalTransformation": {
-                        "position": {
-                            "x": 35.0,
-                            "y": 0.0,
-                            "z": 0.0
-                        },
-                        "rotation": {
-                            "x": 0.0,
-                            "y": -0.0,
-                            "z": 0.0
-                        },
-                        "scale": {
-                            "x": 0.10000000149011612,
-                            "y": 0.10000000149011612,
-                            "z": 0.10000000149011612
-                        }
-                    }
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
                 }
             }
-        ]
+        }
     }
 ]

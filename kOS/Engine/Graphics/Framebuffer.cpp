@@ -59,7 +59,7 @@ void GBuffer::InitializeGBuffer(int width, int height) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT4, GL_TEXTURE_2D, gMaterial, 0);
     //Pixel info
-
+   
 
     // tell OpenGL which color attachments we'll use (of this framebuffer) for rendering 
     GLuint attachments[5] = {
@@ -87,6 +87,29 @@ void GBuffer::BindGBuffer() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
 
+}
+void GBuffer::Clear() {
+    // Delete textures
+    glDeleteTextures(1, &gPosition);
+    glDeleteTextures(1, &gNormal);
+    glDeleteTextures(1, &gAlbedoSpec);
+    glDeleteTextures(1, &gReflect);
+    glDeleteTextures(1, &gMaterial);
+
+    // Delete depth RBO
+    glDeleteRenderbuffers(1, &rboDepth);
+
+    // Delete framebuffer
+    glDeleteFramebuffers(1, &gBuffer);
+
+    // Reset IDs to prevent accidental reuse
+    gPosition = 0;
+    gNormal = 0;
+    gAlbedoSpec = 0;
+    gReflect = 0;
+    gMaterial = 0;
+    rboDepth = 0;
+    gBuffer = 0;
 }
 void GBuffer::UseGTextures() {
     glActiveTexture(GL_TEXTURE0);
@@ -122,4 +145,90 @@ void DepthBuffer::InitializeDepthBuffer(int width, int height) {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 
+}
+
+void UIBuffer::InitializeUIBuffer(int width, int height) {
+    glGenFramebuffers(1, &uiBuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, uiBuffer);
+
+    //Generate the texture id
+    glGenTextures(1, &texID);
+    glBindTexture(GL_TEXTURE_2D, texID);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texID, 0);
+
+
+    glGenRenderbuffers(1, &rboDepth);
+    glBindRenderbuffer(GL_RENDERBUFFER, rboDepth);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rboDepth);    // finally check if framebuffer is complete
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // Use floating point values
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+        std::cout << "UIbuffer initialization failed :(\n";
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    this->height = height;
+    this->width = width;
+}
+void UIBuffer::InitializeUIBuffer(int width, int height, GLuint gBuffTtex) {
+
+    glGenFramebuffers(1, &uiBuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, uiBuffer);
+
+    //Generate the texture id
+    glGenTextures(1, &texID);
+    glBindTexture(GL_TEXTURE_2D, texID);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texID, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, gBuffTtex, 0);
+
+    GLuint attachments[2] = {
+    GL_COLOR_ATTACHMENT0,
+    GL_COLOR_ATTACHMENT1,
+    };
+    glDrawBuffers(2, attachments);
+    glGenRenderbuffers(1, &rboDepth);
+    glBindRenderbuffer(GL_RENDERBUFFER, rboDepth);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rboDepth);    // finally check if framebuffer is complete
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // Use floating point values
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+        std::cout << "UIbuffer initialization failed :(\n";
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    this->height = height;
+    this->width = width;
+
+}
+void UIBuffer::Update(int width, int height, GLuint gBuffTtex) {
+    //Bind texture data
+    glBindFramebuffer(GL_FRAMEBUFFER, uiBuffer);
+    glBindTexture(GL_TEXTURE_2D, texID);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glBindRenderbuffer(GL_RENDERBUFFER, rboDepth);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
+    glBindRenderbuffer(GL_RENDERBUFFER, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texID, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, gBuffTtex, 0);
+    GLuint attachments[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
+    glDrawBuffers(2, attachments);
+
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rboDepth);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    this->height = height;
+    this->width = width;
+    //Rebind data
+}
+void UIBuffer::BindForDrawing() {
+    glBindFramebuffer(GL_FRAMEBUFFER, uiBuffer);
+    glViewport(0, 0, static_cast<GLsizei>(this->width), static_cast<GLsizei>(this->height));
+    const float clearColor[4] = { 0.f, 0.f, 0.f, 0.f };
+    glClearBufferfv(GL_COLOR, 0, clearColor);
+    //glEnable(GL_DEPTH_TEST);
 }

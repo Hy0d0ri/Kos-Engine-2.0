@@ -32,9 +32,8 @@ using namespace physics;
 
 namespace ecs {
     void RigidbodySystem::Init() {
-        onDeregister.Add([](EntityID id) {
-            ECS* ecs = ECS::GetInstance();
-            auto* rb = ecs->GetComponent<RigidbodyComponent>(id);
+        onDeregister.Add([&](EntityID id) {
+            auto* rb = m_ecs.GetComponent<RigidbodyComponent>(id);
             if (!rb || !rb->actor) { return; }
             PxRigidDynamic* actor = reinterpret_cast<PxRigidDynamic*>(rb->actor);
             PxU32 nbShapes = actor->getNbShapes();
@@ -50,9 +49,9 @@ namespace ecs {
             if (scene) { scene->removeActor(*actor); }
             actor->release();
             rb->actor = nullptr;
-            auto* box = ecs->GetComponent<BoxColliderComponent>(id);
-            auto* sphere = ecs->GetComponent<SphereColliderComponent>(id);
-            auto* capsule = ecs->GetComponent<CapsuleColliderComponent>(id);
+            auto* box = m_ecs.GetComponent<BoxColliderComponent>(id);
+            auto* sphere = m_ecs.GetComponent<SphereColliderComponent>(id);
+            auto* capsule = m_ecs.GetComponent<CapsuleColliderComponent>(id);
             if (box) { 
                 box->shape = nullptr; 
                 box->actor = nullptr; 
@@ -68,16 +67,13 @@ namespace ecs {
         });
     }
 
-    void RigidbodySystem::Update(const std::string& scene) {
-        ECS* ecs = ECS::GetInstance();
+    void RigidbodySystem::Update() {
         const auto& entities = m_entities.Data();
 
-        auto pm = PhysicsManager::GetInstance();
-
         for (EntityID id : entities) {
-            NameComponent* name = ecs->GetComponent<NameComponent>(id);
-            TransformComponent* trans = ecs->GetComponent<TransformComponent>(id);
-            RigidbodyComponent* rb = ecs->GetComponent<RigidbodyComponent>(id);
+            NameComponent* name = m_ecs.GetComponent<NameComponent>(id);
+            TransformComponent* trans = m_ecs.GetComponent<TransformComponent>(id);
+            RigidbodyComponent* rb = m_ecs.GetComponent<RigidbodyComponent>(id);
 
             if ( name->hide) { continue; }
 
@@ -90,12 +86,12 @@ namespace ecs {
                     PxQuat{ rot.x, rot.y, rot.z, rot.w }
                 };
 
-                actor = pm->GetPhysics()->createRigidDynamic(pos);
+                actor = m_physicsManager.GetPhysics()->createRigidDynamic(pos);
                 rb->actor = static_cast<void*>(actor);
 
-                auto* box = ecs->GetComponent<BoxColliderComponent>(id);
-                auto* sphere = ecs->GetComponent<SphereColliderComponent>(id);
-                auto* capsule = ecs->GetComponent<CapsuleColliderComponent>(id);
+                auto* box = m_ecs.GetComponent<BoxColliderComponent>(id);
+                auto* sphere = m_ecs.GetComponent<SphereColliderComponent>(id);
+                auto* capsule = m_ecs.GetComponent<CapsuleColliderComponent>(id);
 
                 if (box && box->shape) {
                     PxShape* shape = static_cast<PxShape*>(box->shape);
@@ -104,7 +100,7 @@ namespace ecs {
                         PxRigidActor* prevActor = static_cast<PxRigidActor*>(box->actor);
                         prevActor->detachShape(*shape);
                         if (prevActor->getNbShapes() == 0) {
-                            pm->GetScene()->removeActor(*prevActor);
+                            m_physicsManager.GetScene()->removeActor(*prevActor);
                             prevActor->release();
                         }
                     }
@@ -119,7 +115,7 @@ namespace ecs {
                         PxRigidActor* prevActor = static_cast<PxRigidActor*>(sphere->actor);
                         prevActor->detachShape(*shape);
                         if (prevActor->getNbShapes() == 0) {
-                            pm->GetScene()->removeActor(*prevActor);
+                            m_physicsManager.GetScene()->removeActor(*prevActor);
                             prevActor->release();
                         }
                     }
@@ -133,7 +129,7 @@ namespace ecs {
                         PxRigidActor* prevActor = static_cast<PxRigidActor*>(capsule->actor);
                         prevActor->detachShape(*shape);
                         if (prevActor->getNbShapes() == 0) {
-                            pm->GetScene()->removeActor(*prevActor);
+                            m_physicsManager.GetScene()->removeActor(*prevActor);
                             prevActor->release();
                         }
                     }
@@ -141,35 +137,18 @@ namespace ecs {
                     capsule->actor = rb->actor;
                 }
                 PxRigidBodyExt::updateMassAndInertia(*actor, rb->mass);
-                pm->GetScene()->addActor(*actor);
-            } else {
-                actor->setMass(rb->mass);
-                actor->setLinearDamping(rb->drag);
-                actor->setAngularDamping(rb->angularDrag);
-
-                actor->setRigidBodyFlag(PxRigidBodyFlag::eKINEMATIC, rb->isKinematic);
-                actor->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, !rb->useGravity);
-
-                ToPhysXContraints(actor, rb->constraints);
-                ToPhysxCollisionDetectionMode(actor, rb->collisionDetection);
-                ToPhysxInterpolation(actor, rb->interpolation);
+                actor->userData = reinterpret_cast<void*>(static_cast<uintptr_t>(id));
+                m_physicsManager.GetScene()->addActor(*actor);
             }
 
-            glm::vec3 pos{ trans->WorldTransformation.position };
-            glm::quat rot{ glm::radians(trans->WorldTransformation.rotation) };
-            PxTransform pxTrans{ PxVec3{ pos.x, pos.y, pos.z }, PxQuat{ rot.x, rot.y, rot.z, rot.w } };
-
-            if (rb->isKinematic) {
-                actor->setKinematicTarget(pxTrans);
-            } else {
-                actor->setGlobalPose(pxTrans);
-                PxTransform pose = actor->getGlobalPose();
-                TransformSystem::SetImmediateWorldPosition(trans, glm::vec3{ pose.p.x,pose.p.y,pose.p.z });
-                //trans->WorldTransformation.position = glm::vec3{ pose.p.x,pose.p.y,pose.p.z };
-                glm::quat q{ pose.q.w,pose.q.x,pose.q.y,pose.q.z };
-                //trans->WorldTransformation.rotation = glm::degrees(glm::eulerAngles(q));
-                TransformSystem::SetImmediateWorldRotation(trans, glm::degrees(glm::eulerAngles(q)));
-            }
+            actor->setMass(rb->mass);
+            actor->setLinearDamping(rb->drag);
+            actor->setAngularDamping(rb->angularDrag);
+            actor->setRigidBodyFlag(PxRigidBodyFlag::eKINEMATIC, rb->isKinematic);
+            actor->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, !rb->useGravity);
+            ToPhysXContraints(actor, rb->constraints);
+            ToPhysxCollisionDetectionMode(actor, rb->collisionDetection);
+            ToPhysxInterpolation(actor, rb->interpolation);
         }
     }
 }
