@@ -56,7 +56,7 @@ namespace Application {
 
 
         int init(int windowWidth, int windowHeight);
-        int Draw();
+        int Update();
         int CleanUp();
 
 
@@ -75,6 +75,9 @@ namespace Application {
 		
 		void setCursorImage(const std::string& image, bool centered);
         GLFWcursor* currCursor;
+
+
+		void CheckFullscreen();
     };
 }
 

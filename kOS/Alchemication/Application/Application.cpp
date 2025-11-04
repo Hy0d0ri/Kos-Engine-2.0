@@ -19,9 +19,6 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 /********************************************************************/
 
 
-
-
-
 #include "Application.h"
 #include "ApplicationData.h"
 #include "Resources/ResourceManager.h"
@@ -51,6 +48,7 @@ namespace Application {
         /*--------------------------------------------------------------
            INITIALIZE OPENGL WINDOW
         --------------------------------------------------------------*/
+        lvWindow.enabledFullScreen = true; //set to true for fullscreen launch
         lvWindow.init(windowData.windowWidth, windowData.windowHeight);
         LOGGING_INFO("Load Window Successful");
 
@@ -143,8 +141,13 @@ namespace Application {
                 /*--------------------------------------------------------------
                     UPDATE INPUT
                 --------------------------------------------------------------*/
-
                 input.InputUpdate(deltaTime);
+
+                /*--------------------------------------------------------------
+                 Update Window
+                --------------------------------------------------------------*/
+                lvWindow.Update();
+
                 /*--------------------------------------------------------------
                     UPDATE ECS
                 --------------------------------------------------------------*/
@@ -176,10 +179,6 @@ namespace Application {
                 --------------------------------------------------------------*/
                 graphicsManager.gm_ResetFrameBuffer();
 
-                /*--------------------------------------------------------------
-                 DRAWING/RENDERING Window
-                --------------------------------------------------------------*/
-                lvWindow.Draw();
 
                 /*--------------------------------------------------------------
                     ecs Endframe

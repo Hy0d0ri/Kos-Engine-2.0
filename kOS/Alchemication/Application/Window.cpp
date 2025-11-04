@@ -207,7 +207,7 @@ namespace Application {
             return -1;
         }
         //set call back
-        if (enabledFullScreen) glfwSetWindowFocusCallback(window, fullScreenFocusCallback);
+        CheckFullscreen();
         glfwSetWindowIconifyCallback(window, iconifyCallback);
         glfwMaximizeWindow(window); // Maximize the window
 
@@ -238,25 +238,36 @@ namespace Application {
 
 
 
-	int AppWindow::Draw() {
+	int AppWindow::Update() {
 
 
 
         if ((m_inputSystem.IsKeyPressed(keys::LeftAlt) || m_inputSystem.IsKeyPressed(keys::RightAlt)) && m_inputSystem.IsKeyTriggered(keys::ENTER)) {
-            if (enabledFullScreen) {
-                glfwSetWindowFocusCallback(window, windowedFocusCallback);
-                glfwSetWindowMonitor(window, nullptr, 100, 100, static_cast<int>(windowWidth), static_cast<int>(windowHeight), 0);
-                enabledFullScreen = false;
-            }
-            else {
-                glfwSetWindowFocusCallback(window, fullScreenFocusCallback);
-                glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
-                enabledFullScreen = true;
-            }
+            CheckFullscreen();
+        }
+
+        if (m_ecs.GetState()==ecs::RUNNING) {
+            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        }
+        else {
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);//disabled for game mode
         }
 
         return 0;
 	}
+
+    void AppWindow::CheckFullscreen(){
+         if (enabledFullScreen) {
+             glfwSetWindowFocusCallback(window, fullScreenFocusCallback);
+             glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+             enabledFullScreen = false;
+        }
+        else {
+            glfwSetWindowFocusCallback(window, windowedFocusCallback);
+            glfwSetWindowMonitor(window, nullptr, 100, 100, static_cast<int>(windowWidth), static_cast<int>(windowHeight), 0);
+            enabledFullScreen = true;
+        }
+    }
 
 	int AppWindow::CleanUp() {
 

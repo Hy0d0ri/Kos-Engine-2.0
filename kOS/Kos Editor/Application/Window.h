@@ -56,12 +56,12 @@ namespace Application {
 
 
         int init(int windowWidth, int windowHeight);
-        int Draw();
+        int Update();
         int CleanUp();
 
 
-		float windowHeight;
-		float windowWidth;
+        float windowHeight;
+        float windowWidth;
 
 
         GLFWwindow* window;
@@ -72,9 +72,12 @@ namespace Application {
         bool fullScreen;
         bool enabledFullScreen{ false };//use this to set launch application fullscreen or not
 
-		
-		void setCursorImage(const std::string& image, bool centered);
+
+        void setCursorImage(const std::string& image, bool centered);
         GLFWcursor* currCursor;
+
+
+        void CheckFullscreen();
     };
 }
 
