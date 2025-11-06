@@ -142,17 +142,14 @@ namespace scenes {
         }
     }
 
-    std::vector<std::filesystem::path> SceneManager::GetAllScenesPath() {
-        std::vector<std::string> sce;
-        for (auto& scenes : m_ecs.sceneMap) {
-            sce.push_back(scenes.first);
+
+    std::vector<PathActive> SceneManager::GetAllScenesPath() {
+
+        std::vector<PathActive> scenepath;
+        for (auto& [scene, sceneData] : m_ecs.sceneMap) {
+            scenepath.emplace_back(PathActive{ loadScenePath.find(scene)->second, sceneData.isActive});
         }
 
-        //store scene path
-        std::vector<std::filesystem::path> scenepath;
-        for (auto& scene : sce) {
-            scenepath.push_back(loadScenePath.find(scene)->second.string());
-        }
 
         return scenepath;
     }
@@ -197,7 +194,7 @@ namespace scenes {
         }
     }
 
-	void SceneManager::Update()
+	void SceneManager::EndFrame()
 	{
         if (!m_clearQueue.empty()) {
 
@@ -260,15 +257,12 @@ namespace scenes {
 
 	void SceneManager::ImmediateClearScene(const std::string& scene)
 	{
-
-		size_t numberOfEntityInScene = m_ecs.sceneMap.find(scene)->second.sceneIDs.size();
-		for (int n{}; n < numberOfEntityInScene; n++) {
-			if (m_ecs.sceneMap.find(scene)->second.sceneIDs.size() <= 0) break;
-			auto entityid = m_ecs.sceneMap.find(scene)->second.sceneIDs.begin();
-			if (!m_ecs.GetParent(*entityid)) {
-				m_ecs.DeleteEntity(*entityid);
-			}
-		}
+        auto entityids = m_ecs.sceneMap.find(scene)->second.sceneIDs;
+        for (auto id : entityids) {
+            if (!m_ecs.GetParent(id)) {
+                m_ecs.DeleteEntity(id);
+            }
+        }
 
 
 		//remove scene from activescenes

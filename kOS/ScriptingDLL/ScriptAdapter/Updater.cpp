@@ -43,7 +43,7 @@ extern "C"  __declspec(dllexport) void UpdateStatic(StaticVariableManager* svm) 
 
 	RegisterScript<GroundCheckScript>(TemplateSC::ecsPtr);
 	RegisterScript<PlayerManagerScript>(TemplateSC::ecsPtr);
-	RegisterScript<GunScript>(TemplateSC::ecsPtr);
+	RegisterScript<AbilityUIScript>(TemplateSC::ecsPtr);
 
 	RegisterScript<PlayerScript>(TemplateSC::ecsPtr);
 	RegisterScript<EnemyScripts>(TemplateSC::ecsPtr);
@@ -51,7 +51,6 @@ extern "C"  __declspec(dllexport) void UpdateStatic(StaticVariableManager* svm) 
 
 	RegisterScript<BulletLogic>(TemplateSC::ecsPtr);
 	RegisterScript<EnemyManagerScript>(TemplateSC::ecsPtr);
-	RegisterScript<PlayerManagerScript>(TemplateSC::ecsPtr);
 
 	FieldComponentTypeRegistry::CreateAllDrawers(static_cast<Fields*>(svm->field)->GetAction());
 }
