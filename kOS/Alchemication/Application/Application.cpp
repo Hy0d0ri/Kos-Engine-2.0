@@ -32,6 +32,7 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 #include "Debugging/Performance.h"
 #include "Scripting/ScriptManager.h"
 #include "Physics/PhysicsManager.h"
+#include "Audio/AudioManager.h"
 
 
 namespace Application {
@@ -79,6 +80,7 @@ namespace Application {
         --------------------------------------------------------------*/
         scriptManager.Init(exePath.string());
 
+        audioManager.Init();
         /*--------------------------------------------------------------
            INITIALIZE Start Scene
         --------------------------------------------------------------*/
@@ -92,6 +94,7 @@ namespace Application {
         --------------------------------------------------------------*/
         graphicsManager.gm_Initialize(static_cast<float>(windowData.windowWidth), static_cast<float>(windowData.windowHeight));
         LOGGING_INFO("Load Graphic Pipeline Successful");
+
 
         /*--------------------------------------------------------------
            INITIALIZE Input

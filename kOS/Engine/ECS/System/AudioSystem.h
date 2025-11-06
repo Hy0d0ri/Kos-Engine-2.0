@@ -33,8 +33,8 @@ namespace ecs {
         void Init() override;
         void Update() override;
 
-        static void SetPaused(bool paused);
-        static void StopAll(); 
+        //static void SetPaused(bool paused);
+        //static void StopAll(); 
 
         REFLECTABLE(AudioSystem)
 

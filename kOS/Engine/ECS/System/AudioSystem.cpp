@@ -24,36 +24,37 @@ namespace ecs {
     bool AudioSystem::s_paused = false;
 
     void AudioSystem::Init() {
-        if (!s_fmod) {
-            FMOD_RESULT r = FMOD::System_Create(&s_fmod);
+        //if (!s_fmod) {
+        //    FMOD_RESULT r = FMOD::System_Create(&s_fmod);
 
-            //Intialize fmod
-            if (r == FMOD_OK && s_fmod) {
-                s_fmod->init(64, FMOD_INIT_NORMAL, nullptr);
-                R_Audio::SetGlobalSystem(s_fmod);
-            }
-        }
+        //    //Intialize fmod
+        //    if (r == FMOD_OK && s_fmod) {
+        //        s_fmod->init(64, FMOD_INIT_NORMAL, nullptr);
+        //        R_Audio::SetGlobalSystem(s_fmod);
+        //    }
+        //}
     }
 
-    // pause/unpause
-    void AudioSystem::SetPaused(bool paused) {
-        s_paused = paused;
-        if (!s_fmod) return;
-        FMOD::ChannelGroup* master = nullptr;
-        if (s_fmod->getMasterChannelGroup(&master) == FMOD_OK && master) {
-            master->setPaused(paused);
-        }
-    }
+    //// pause/unpause
+    //void AudioSystem::SetPaused(bool paused) {
+    //    s_paused = paused;
+    //    if (!s_fmod) return;
+    //    FMOD::ChannelGroup* master = nullptr;
+    //    if (s_fmod->getMasterChannelGroup(&master) == FMOD_OK && master) {
+    //        master->setPaused(paused);
+    //    }
+    //}
 
-    // stop all
-    void AudioSystem::StopAll() {
-        if (!s_fmod) return;
-        FMOD::ChannelGroup* master = nullptr;
-        if (s_fmod->getMasterChannelGroup(&master) == FMOD_OK && master) {
-            master->stop();
-        }
+    //// stop all
+    //void AudioSystem::StopAll() {
+    //    if (!s_fmod) return;
+    //    FMOD::ChannelGroup* master = nullptr;
+    //    if (s_fmod->getMasterChannelGroup(&master) == FMOD_OK && master) {
+    //        master->stop();
+    //    }
 
-    }
+    //}
+
     void AudioSystem::Update() {
        
         const auto& entities = m_entities.Data();
