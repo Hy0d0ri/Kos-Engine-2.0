@@ -40,8 +40,6 @@ namespace ecs {
         REFLECTABLE(AudioSystem)
 
     private:
-        //static FMOD::System* s_fmod;
-        //static bool s_paused;
         glm::vec3 m_listenerPos{ 0.0f, 0.0f, 0.0f };
         glm::vec3 m_listenerFwd{ 0.0f, 0.0f, -1.0f };
         glm::vec3 m_listenerUp{ 0.0f, 1.0f,  0.0f };
