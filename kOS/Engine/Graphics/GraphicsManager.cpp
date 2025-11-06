@@ -326,7 +326,7 @@ void GraphicsManager::gm_FillDepthCube(const CameraData& camera) {
 		pointShadowShader->SetVec3("lightPos", lightRenderer.pointLightsToDraw[i].position);
 		for (MeshData& md : meshRenderer.meshesToDraw) {
 			pointShadowShader->SetTrans("model", md.transformation);
-			md.meshToUse->PBRDraw(*pointShadowShader, *md.meshMaterial);
+			md.meshToUse->PBRDraw(*pointShadowShader, md.meshMaterial);
 
 		}
 		for (SkinnedMeshData& md : skinnedMeshRenderer.skinnedMeshesToDraw) {
@@ -359,7 +359,7 @@ void GraphicsManager::gm_FillDepthCube(const CameraData& camera, int index,glm::
 	pointShadowShader->SetVec3("lightPos", lighPos);
 	for (MeshData& md : meshRenderer.meshesToDraw) {
 		pointShadowShader->SetTrans("model", md.transformation);
-		md.meshToUse->PBRDraw(*pointShadowShader, *md.meshMaterial);
+		md.meshToUse->PBRDraw(*pointShadowShader, md.meshMaterial);
 
 	}
 	for (SkinnedMeshData& md : skinnedMeshRenderer.skinnedMeshesToDraw) {

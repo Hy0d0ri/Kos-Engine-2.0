@@ -427,10 +427,22 @@ inline T R_Model::DecodeBinary(std::string& bin, int& offset)
     return value;
 }
 
-void R_Model::PBRDraw(Shader& shader, PBRMaterial const& pbrMat) {
+void R_Model::PBRDraw(Shader& shader, std::shared_ptr<PBRMaterial> const& pbrMat) {
     shader.SetBool("isNotRigged", false);
-    for (unsigned int i = 0; i < meshes.size(); i++)
-        meshes[i].PBRDraw(shader, pbrMat);
+    if (pbrMat->listCon) {
+
+        std::vector<PBRMaterial>& pbr = reinterpret_cast<PBRMaterialList*>(pbrMat.get())->pbrMatList;
+        for (unsigned int i = 0,j=0; i < meshes.size(); i++) {
+            j = j < pbr.size()-1  ? j + 1 : j;
+            meshes[i].PBRDraw(shader, pbr[j]);
+        }
+    }
+    else {
+        for (unsigned int i = 0; i < meshes.size(); i++) {
+            meshes[i].PBRDraw(shader, *pbrMat);
+        }
+    }
+
 }
 
 void R_Model::DrawAnimation(Shader& shader, PBRMaterial const& pbrMat, const std::vector<glm::mat4>& boneMatrices)

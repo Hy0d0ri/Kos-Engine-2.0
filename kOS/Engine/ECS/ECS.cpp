@@ -26,6 +26,7 @@ namespace ecs{
 		RegisterComponent<CanvasRendererComponent>();
 		RegisterComponent<MeshRendererComponent>();
 		RegisterComponent<MaterialComponent>();
+		RegisterComponent<MaterialListComponent>();
 		RegisterComponent<SkinnedMeshRendererComponent>();
 		RegisterComponent<AnimatorComponent>();
 		RegisterComponent<LightComponent>();
@@ -51,7 +52,7 @@ namespace ecs{
 		RegisterSystem<RigidbodySystem, TransformComponent, RigidbodyComponent>(RUNNING);
 		RegisterSystem<PhysicsSystem, TransformComponent, RigidbodyComponent>(RUNNING);
 		RegisterSystem<CameraSystem, TransformComponent, CameraComponent>();
-		RegisterSystem<MeshRenderSystem, TransformComponent, MaterialComponent, MeshFilterComponent>();
+		RegisterSystem<MeshRenderSystem, TransformComponent, MeshFilterComponent>();
 		RegisterSystem<SkinnedMeshRenderSystem, TransformComponent, SkinnedMeshRendererComponent, AnimatorComponent>();
 		RegisterSystem<CubeRenderSystem, TransformComponent, MaterialComponent, CubeRendererComponent>();
 		RegisterSystem<SphereRenderSystem, TransformComponent, MaterialComponent, SphereRendererComponent>();
