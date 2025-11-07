@@ -66,7 +66,9 @@ namespace ecs {
                 if (!res) continue;
 
                 //LOad sound
-                if (!res->GetSound()) { 
+                if (!res->GetSound()) {
+                    res->SetSystem(audio::AudioManager::GetCore());
+
                     res->Load(); 
                 }     
 

@@ -30,7 +30,7 @@ namespace audio {
         s_fmod = core;
         s_paused = false;
 
-        R_Audio::SetGlobalSystem(s_fmod); 
+        //R_Audio::SetGlobalSystem(s_fmod); 
 
     }
 
