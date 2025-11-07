@@ -161,9 +161,6 @@ namespace gui {
 
 	void ImGuiHandler::Update()
 	{
-
-
-
 		NewFrame();
 
 		if (m_input.IsKeyTriggered(keys::F11))
@@ -278,15 +275,27 @@ namespace gui {
 		ImGuiIO& io = ImGui::GetIO();  // Get input/output data
 		//If CTRL + S press, save
 		if (io.KeyCtrl && ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_S)) && (m_ecs.GetState() != ecs::RUNNING)) {
-
 			onSaveAll.Invoke("");
 		}
 
+		if (m_input.currentMousePos != m_input.prevMousePos) {
+			double mouseX, mouseY;
+			int winX, winY;
+			glfwGetWindowPos(m_window.window, &winX, &winY);
+			glfwGetCursorPos(m_window.window, &mouseX, &mouseY);
+			mouseX += winX;
+			mouseY += winY; // Relative position to glfwWindowPosition
+			glm::vec2 relativeMousePos = glm::vec2(mouseX - gameWindowPos.x, gameWindowSize.y - (mouseY - gameWindowPos.y));
+			float xScale = (m_window.windowWidth / gameWindowSize.x);	// Will probably change it so that it doesnt have to recalculate scale and gameWindowSize all the time
+			float yScale = (m_window.windowHeight / gameWindowSize.y);
+			relativeMousePos.x *= xScale;
+			relativeMousePos.y *= yScale;
+			m_input.currentMousePos = relativeMousePos;
+		}
 	}
 
 	void ImGuiHandler::openAndLoadSceneDialog()
 	{
-
 		m_assetManager.GetAssetWatcher()->Pause();
 
 		//char filePath[MAX_PATH];
@@ -323,7 +332,5 @@ namespace gui {
 		// Check if the lowercase version of y is found in x
 		return lower_x.find(lower_y) != std::string::npos;
 	}
-
-
 }
 
