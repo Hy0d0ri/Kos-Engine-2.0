@@ -21,3 +21,4 @@
 #include "GroundCheckScript.h"
 #include "PlayerManagerScript.h"
 #include "AbilityUIScript.h"
+#include "EventColliderScript.h"

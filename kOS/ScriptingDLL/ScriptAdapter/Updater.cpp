@@ -51,6 +51,7 @@ extern "C"  __declspec(dllexport) void UpdateStatic(StaticVariableManager* svm) 
 
 	RegisterScript<FakeEnemyScript>(TemplateSC::ecsPtr);
 	RegisterScript<FakePlayerHealthScript>(TemplateSC::ecsPtr);
+	RegisterScript<EventColliderScript>(TemplateSC::ecsPtr);
 
 	FieldComponentTypeRegistry::CreateAllDrawers(static_cast<Fields*>(svm->field)->GetAction());
 }
