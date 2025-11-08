@@ -190,7 +190,18 @@
             "isKinematic": false,
             "interpolation": 0,
             "collisionDetection": 0,
-            "constraints": 0
+            "constraints": 0,
+            "speed": 0.0,
+            "velocity": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "angularVelocity": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
         },
         "TransformComponent": {
             "WorldTransformation": {
@@ -466,7 +477,18 @@
                     "isKinematic": true,
                     "interpolation": 0,
                     "collisionDetection": 0,
-                    "constraints": 0
+                    "constraints": 0,
+                    "speed": 0.0,
+                    "velocity": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "angularVelocity": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    }
                 },
                 "SphereColliderComponent": {
                     "isTrigger": true,
@@ -521,7 +543,7 @@
     {
         "entityGUID": "52dac04b-17f9-d959-a3b8-8621e6f163f1",
         "CapsuleColliderComponent": {
-            "isTrigger": true,
+            "isTrigger": false,
             "capsule": {
                 "center": {
                     "x": 0.0,
@@ -533,9 +555,12 @@
                 "capsuleDirection": 1
             }
         },
-        "EnemyManagerScript": {
-            "enemyHealth": 10,
-            "enemyMovementSpeed": 1.0
+        "FakeEnemyScript": {
+            "enemySpeed": 0.30000001192092896,
+            "enemyDamage": 1,
+            "damageInterval": 0.0,
+            "playerObject": "e8f895d3-5d21-1cc1-766a-6d678cd35f8d",
+            "playerObjectID": 0
         },
         "NameComponent": {
             "entityName": "Enemy",
@@ -549,12 +574,33 @@
             "pathfinderMovementSpeed": 2.5,
             "chase": true
         },
+        "RigidbodyComponent": {
+            "mass": 1.0,
+            "drag": 0.0,
+            "angularDrag": 0.05000000074505806,
+            "useGravity": true,
+            "isKinematic": false,
+            "interpolation": 0,
+            "collisionDetection": 0,
+            "constraints": 0,
+            "speed": 0.0,
+            "velocity": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "angularVelocity": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
         "TransformComponent": {
             "WorldTransformation": {
                 "position": {
-                    "x": -85.18982696533203,
-                    "y": -2.007373332977295,
-                    "z": -54.53916931152344
+                    "x": -19.18982696533203,
+                    "y": 5.992626667022705,
+                    "z": -63.53916931152344
                 },
                 "rotation": {
                     "x": 0.0,
@@ -569,9 +615,9 @@
             },
             "LocalTransformation": {
                 "position": {
-                    "x": -85.18982696533203,
-                    "y": -2.007373332977295,
-                    "z": -54.53916931152344
+                    "x": -19.18982696533203,
+                    "y": 5.992626667022705,
+                    "z": -63.53916931152344
                 },
                 "rotation": {
                     "x": 0.0,
@@ -609,9 +655,9 @@
                 "TransformComponent": {
                     "WorldTransformation": {
                         "position": {
-                            "x": -85.18982696533203,
-                            "y": -3.764449119567871,
-                            "z": -54.53916931152344
+                            "x": -19.18982696533203,
+                            "y": 4.235550880432129,
+                            "z": -63.53916931152344
                         },
                         "rotation": {
                             "x": -0.0013324969913810492,
