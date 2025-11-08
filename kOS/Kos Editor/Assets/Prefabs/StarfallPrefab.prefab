@@ -83,7 +83,18 @@
                     "isKinematic": false,
                     "interpolation": 0,
                     "collisionDetection": 0,
-                    "constraints": 0
+                    "constraints": 0,
+                    "speed": 0.0,
+                    "velocity": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "angularVelocity": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    }
                 },
                 "SphereColliderComponent": {
                     "isTrigger": true,
@@ -164,7 +175,18 @@
                     "isKinematic": false,
                     "interpolation": 0,
                     "collisionDetection": 0,
-                    "constraints": 0
+                    "constraints": 0,
+                    "speed": 0.0,
+                    "velocity": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "angularVelocity": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    }
                 },
                 "SphereColliderComponent": {
                     "isTrigger": true,
@@ -245,7 +267,18 @@
                     "isKinematic": false,
                     "interpolation": 0,
                     "collisionDetection": 0,
-                    "constraints": 0
+                    "constraints": 0,
+                    "speed": 0.0,
+                    "velocity": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "angularVelocity": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    }
                 },
                 "SphereColliderComponent": {
                     "isTrigger": true,
@@ -326,7 +359,18 @@
                     "isKinematic": false,
                     "interpolation": 0,
                     "collisionDetection": 0,
-                    "constraints": 0
+                    "constraints": 0,
+                    "speed": 0.0,
+                    "velocity": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "angularVelocity": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    }
                 },
                 "SphereColliderComponent": {
                     "isTrigger": true,
@@ -407,7 +451,18 @@
                     "isKinematic": false,
                     "interpolation": 0,
                     "collisionDetection": 0,
-                    "constraints": 0
+                    "constraints": 0,
+                    "speed": 0.0,
+                    "velocity": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "angularVelocity": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    }
                 },
                 "SphereColliderComponent": {
                     "isTrigger": true,
