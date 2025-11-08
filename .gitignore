@@ -21,5 +21,6 @@ build
 out
 Debug
 Release
+imguiStyle.json
+*[Cached]*
 kOS/Resource/
-kOS/Kos Editor/Configs/imguiStyle.json
