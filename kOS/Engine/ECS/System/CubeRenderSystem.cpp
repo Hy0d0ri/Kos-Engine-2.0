@@ -2,7 +2,7 @@
 #include "ECS/ECS.h"
 #include "CubeRenderSystem.h"
 #include "Graphics/GraphicsManager.h"
-#include "ECS/Component/MeshRendererComponent.h"
+
 #include "ECS/Component/TransformComponent.h"
 #include "ECS/Component/NameComponent.h"
 namespace ecs
