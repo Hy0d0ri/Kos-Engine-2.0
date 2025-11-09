@@ -4,10 +4,6 @@ namespace audio {
     AudioManager::AudioManager() { s_fmod = nullptr; s_paused = false; }
 
     AudioManager::~AudioManager(){
-        if (s_fmod) {
-            s_fmod->release();
-            s_fmod = nullptr;
-        }
     }
 
     void AudioManager::Init() {

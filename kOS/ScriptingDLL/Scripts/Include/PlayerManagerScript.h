@@ -31,6 +31,8 @@ public:
 	utility::GUID flamethrowerPrefab;
 	utility::GUID starfallPrefab;
 
+	utility::GUID gunSfxGUID;
+
 	float rotationX = 0.f, rotationY = 0.f;
 	bool cursorIsHidden = false;
 	glm::vec3 cameraFacingDirection;
@@ -238,6 +240,16 @@ public:
 				std::shared_ptr<R_Scene> bullet = resource->GetResource<R_Scene>(bulletPrefab);
 
 				if (bullet) {
+
+					if (auto* ac = ecsPtr->GetComponent<ecs::AudioComponent>(entity)) {
+						for (auto& af : ac->audioFiles) {
+							if (af.audioGUID == gunSfxGUID && af.isSFX) {
+								af.requestPlay = true;
+								break;
+							}
+						}
+					}
+
 					std::string currentScene = ecsPtr->GetSceneByEntityID(entity);
 					//ecs::EntityID bulletID = bullet->DuplicatePrefabIntoScene(currentScene);
 					ecs::EntityID bulletID = DuplicatePrefabIntoScene<R_Scene>(currentScene, bulletPrefab);
@@ -408,5 +420,5 @@ public:
 
 	REFLECTABLE(PlayerManagerScript, playerHealth, playerMovementSpeed, playerCrouchingSpeed, playerJumpForce, playerCameraSpeedX,
 		playerCameraSpeedY, creationPoint, cameraObject, armModel, groundCheck, bulletPrefab, fireballPrefab, lightningStrikePrefab,
-		acidBlastPrefab, groundSpikesPrefab, starfallPrefab);
+		acidBlastPrefab, groundSpikesPrefab, starfallPrefab, gunSfxGUID);
 };
