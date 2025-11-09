@@ -11,6 +11,8 @@ public:
 	float timeBeforeDeath = 2.5f;
 	float currentTimer = 0.f;
 
+	utility::GUID enemyDeathSfxGUID; //gonna remove this when stuff are fixed
+
 	// FOR NOW UNTIL DELETE GETS IMPLEMENTED
 	bool isDead = false;
 
@@ -43,6 +45,14 @@ public:
 		// Rudimentary bullets
 		physicsPtr->GetEventCallback()->OnTriggerEnter.Add([this](const physics::Collision& col) {
 			if (ecsPtr->GetComponent<NameComponent>(col.otherEntityID)->entityTag == "Enemy") {
+				if (auto* ac = ecsPtr->GetComponent<ecs::AudioComponent>(entity)) {
+					for (auto& af : ac->audioFiles) {
+						if (af.audioGUID == enemyDeathSfxGUID && af.isSFX) {
+							af.requestPlay = true;
+							break;
+						}
+					}
+				}
 					ecsPtr->DeleteEntity(col.otherEntityID);
 			}
 		});
@@ -68,9 +78,10 @@ public:
 			//}
 			if (currentTimer >= timeBeforeDeath || isDead) {
 				ecsPtr->DeleteEntity(entity);
+
 			}
 		}
 	}
 
-	REFLECTABLE(BulletLogic, bulletDamage, bulletSpeed)
+	REFLECTABLE(BulletLogic, bulletDamage, bulletSpeed, enemyDeathSfxGUID)
 };

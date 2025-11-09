@@ -142,6 +142,39 @@
     },
     {
         "entityGUID": "e8f895d3-5d21-1cc1-766a-6d678cd35f8d",
+        "AudioComponent": {
+            "audioFiles": [
+                {
+                    "audioGUID": "8f243e52-3d4e-d7bd-13d4-3d60874b10f9",
+                    "volume": 1.0,
+                    "loop": true,
+                    "playOnStart": true,
+                    "hasPlayed": false,
+                    "pan": 0.0,
+                    "isBGM": true,
+                    "isSFX": false,
+                    "use3D": false,
+                    "minDistance": 1.0,
+                    "maxDistance": 20.0
+                },
+                {
+                    "audioGUID": "5bdf561d-0450-1649-f051-3a99755974cc",
+                    "volume": 1.0,
+                    "loop": false,
+                    "playOnStart": false,
+                    "hasPlayed": false,
+                    "pan": 0.0,
+                    "isBGM": false,
+                    "isSFX": true,
+                    "use3D": false,
+                    "minDistance": 1.0,
+                    "maxDistance": 20.0
+                }
+            ]
+        },
+        "AudioScript": {
+            "GUID": "8f243e52-3d4e-d7bd-13d4-3d60874b10f9"
+        },
         "CapsuleColliderComponent": {
             "isTrigger": false,
             "capsule": {
@@ -180,7 +213,8 @@
             "lightningStrikePrefab": "ea36b838-cef9-7c8c-584a-29654652024a",
             "acidBlastPrefab": "df217809-aa63-539d-4bb6-d7ffde283b90",
             "groundSpikesPrefab": "0e0349c9-02d8-f6b8-df3c-f7f6943e81bf",
-            "starfallPrefab": "4c9702d6-127d-fc41-6704-bc63dc2b0998"
+            "starfallPrefab": "4c9702d6-127d-fc41-6704-bc63dc2b0998",
+            "gunSfxGUID": "5bdf561d-0450-1649-f051-3a99755974cc"
         },
         "RigidbodyComponent": {
             "mass": 7.5,
