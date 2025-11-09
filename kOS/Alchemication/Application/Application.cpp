@@ -64,7 +64,7 @@ namespace Application {
         /*--------------------------------------------------------------
           INITIALIZE GRAPHICS PIPE
         --------------------------------------------------------------*/
-        graphicsManager.gm_Initialize(static_cast<float>(windowData.gameResWidth), static_cast<float>(windowData.gameResHeight));
+        graphicsManager.gm_Initialize(static_cast<float>(windowData.windowWidth), static_cast<float>(windowData.windowHeight));
         LOGGING_INFO("Load Graphic Pipeline Successful");
 
         /*--------------------------------------------------------------
