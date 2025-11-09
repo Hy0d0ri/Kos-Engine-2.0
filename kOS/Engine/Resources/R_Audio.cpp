@@ -37,7 +37,8 @@ void R_Audio::Load()
 	//Reset sound if have sound
 	if (m_sound) { 
 		m_sound->release(); 
-		m_sound = nullptr; }
+		m_sound = nullptr; 
+}
 
 	unsigned int flags = FMOD_DEFAULT;
 	if (m_createFlags != 0) {
@@ -56,9 +57,8 @@ void R_Audio::Load()
 
 void R_Audio::Unload()
 {
-	//Release all sounds
 	if (m_sound) {
-		m_sound->release();
+		FMOD_RESULT r = m_sound->release();
 		m_sound = nullptr;
 	}
 }

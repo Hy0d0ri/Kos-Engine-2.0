@@ -131,8 +131,8 @@ namespace Application {
     {
         auto* app = static_cast<Application::AppWindow*>(glfwGetWindowUserPointer(window));
         if (!app) return;
-        app->windowHeight = height;
-        app->windowWidth = width;
+        app->windowHeight = static_cast<float>(height);
+        app->windowWidth = static_cast<float>(width);
         glViewport(0, 0, width, height);
     }
 
@@ -196,7 +196,7 @@ namespace Application {
 
         monitor = glfwGetPrimaryMonitor();
         mode = glfwGetVideoMode(monitor);
-        window = glfwCreateWindow(_windowWidth, _windowHeight, "Alchemication", enabledFullScreen ? monitor : NULL, NULL);
+        window = glfwCreateWindow(_windowWidth, _windowHeight, "Kos Engine", enabledFullScreen ? monitor : NULL, NULL);
         glfwSetWindowUserPointer(window, this);
         m_inputSystem.InputInit(window);
 

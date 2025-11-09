@@ -87,7 +87,6 @@ namespace gui {
 		RegisterComponent<ecs::CameraComponent>();
 		RegisterComponent<ecs::TextComponent>();
 		RegisterComponent<ecs::MeshFilterComponent>();
-		RegisterComponent<ecs::MeshRendererComponent>();
 		RegisterComponent<ecs::SkinnedMeshRendererComponent>();
 		RegisterComponent<ecs::CanvasRendererComponent>();
 		RegisterComponent<ecs::AnimatorComponent>();
