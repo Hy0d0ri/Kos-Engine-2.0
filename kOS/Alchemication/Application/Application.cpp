@@ -62,12 +62,6 @@ namespace Application {
 
 
         /*--------------------------------------------------------------
-          INITIALIZE GRAPHICS PIPE
-        --------------------------------------------------------------*/
-        graphicsManager.gm_Initialize(static_cast<float>(windowData.gameResWidth), static_cast<float>(windowData.gameResHeight));
-        LOGGING_INFO("Load Graphic Pipeline Successful");
-
-        /*--------------------------------------------------------------
            INITIALIZE Resource Manager
         --------------------------------------------------------------*/
         resourceManager.Init(configpath::resourceFilePath);
