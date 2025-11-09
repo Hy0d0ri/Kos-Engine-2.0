@@ -337,7 +337,7 @@ void CubeRenderer::Clear() {
 
 void SphereRenderer::Render(const CameraData& camera, Shader& shader, Sphere* spherePtr) {
 	for (SphereData& cd : spheresToDraw) {
-		std::cout << "RENDERING SPHERE\n";
+		//std::cout << "RENDERING SPHERE\n";
 		shader.SetTrans("model", cd.transformation);
 		shader.SetVec3("color", glm::vec3{ 1.f,1.f,1.f });
 		shader.SetInt("entityID", cd.entityID + 1);

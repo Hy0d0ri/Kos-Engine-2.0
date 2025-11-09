@@ -62,12 +62,6 @@ namespace Application {
 
 
         /*--------------------------------------------------------------
-          INITIALIZE GRAPHICS PIPE
-        --------------------------------------------------------------*/
-        graphicsManager.gm_Initialize(static_cast<float>(windowData.windowWidth), static_cast<float>(windowData.windowHeight));
-        LOGGING_INFO("Load Graphic Pipeline Successful");
-
-        /*--------------------------------------------------------------
            INITIALIZE Resource Manager
         --------------------------------------------------------------*/
         resourceManager.Init(configpath::resourceFilePath);
@@ -166,7 +160,7 @@ namespace Application {
                 /*--------------------------------------------------------------
                     UPDATE Render Pipeline
                 --------------------------------------------------------------*/
-                graphicsManager.gm_UpdateBuffers(lvWindow.windowWidth, lvWindow.windowHeight);
+                graphicsManager.gm_UpdateBuffers(static_cast<int>(lvWindow.windowWidth), static_cast<int>(lvWindow.windowHeight));
                 graphicsManager.gm_Update();
 
                 /*--------------------------------------------------------------
