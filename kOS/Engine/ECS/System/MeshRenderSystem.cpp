@@ -23,7 +23,7 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 #include "ECS/ECS.h"
 
 #include "MeshRenderSystem.h"
-#include "ECS/Component/MeshRendererComponent.h"
+
 #include "ECS/Component/MeshFilterComponent.h"
 #include "ECS/Component/TransformComponent.h"
 #include "ECS/Component/NameComponent.h"
