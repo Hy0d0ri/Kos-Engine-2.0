@@ -146,12 +146,10 @@ void GraphicsManager::gm_RenderToEditorFrameBuffer()
 
 	gm_RenderCubeMap(editorCamera);
 	gm_RenderDeferredObjects(editorCamera);
-	gm_RenderDebugObjects(editorCamera);
-	gm_RenderParticles(editorCamera);
+	//gm_RenderDebugObjects(editorCamera);
 	//Particle buffer
 
 	framebufferManager.UIBuffer.BindForDrawing();
-	gm_RenderParticles(editorCamera);
 	gm_RenderUIObjects(editorCamera);
 
 	Shader* fboCompositeShader{ &shaderManager.engineShaders.find("FBOCompositeShader")->second };
@@ -223,6 +221,7 @@ void GraphicsManager::gm_FillGBuffer(const CameraData& camera)
 	framebufferManager.gBuffer.BindGBuffer();
 	Shader* gBufferPBRShader{ &shaderManager.engineShaders.find("GBufferPBRShader")->second };
 	Shader* gBufferDebugShader{ &shaderManager.engineShaders.find("GBufferDebugShader")->second };
+	Shader* gBufferParticleShader{ &shaderManager.engineShaders.find("GBufferParticleShader")->second };
 
 	gBufferPBRShader->Use();
 	gBufferPBRShader->SetTrans("projection", camera.GetPerspMtx()); // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
@@ -239,6 +238,9 @@ void GraphicsManager::gm_FillGBuffer(const CameraData& camera)
 	debugRenderer.RenderDebugFrustums(camera, *gBufferPBRShader, gameCameras);
 	
 	gBufferPBRShader->Disuse();
+
+	//Render particles
+	gm_RenderParticles(editorCamera);
 
 	gBufferDebugShader->Use();
 	gBufferDebugShader->SetTrans("view", camera.GetViewMtx());
@@ -611,8 +613,8 @@ void GraphicsManager::gm_RenderUIObjects(const CameraData& camera)
 
 void GraphicsManager::gm_RenderParticles(const CameraData& camera)
 {
-	Shader* basicParticleShader{ &shaderManager.engineShaders.find("BasicParticleShader")->second };
-	particleRenderer.Render(camera, *basicParticleShader);
+	Shader* gBufferParticleShader{ &shaderManager.engineShaders.find("GBufferParticleShader")->second };
+	particleRenderer.Render(camera, *gBufferParticleShader);
 }
 
 void GraphicsManager::gm_ClearGBuffer()

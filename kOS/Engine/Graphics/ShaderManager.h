@@ -52,7 +52,9 @@ public:
 		engineShaders.insert({ "FBOCompositeShader",Shader(fboCompositeVS, fboCompositeFS) });
 		engineShaders.insert({ "MaterialShader",Shader(materialVS, materialFS) });
 		engineShaders.insert({ "PointShadowShader",Shader(pointShadowVS, pointShadowFS,pointShadowGS) });
-		engineShaders.insert({ "BasicParticleShader", Shader(basicParticleVS,basicParticleFS) });
+		//engineShaders.insert({ "BasicParticleShader", Shader(basicParticleVS,basicParticleFS) });
+		//Experiment with creating a particle shader
+		engineShaders.insert({ "GBufferParticleShader", Shader(basicParticleVS,gBufferDebugFS) });
 
 	}
 

@@ -345,6 +345,12 @@ void main()
     vec3 envMap = texture(cubeTexture, vec3(texture(gReflect, TexCoords)) ).rgb;
     vec3 newMat=vec3(texture(gMaterial, TexCoords));
 
+    //Check whether to render shader as per normal
+    if(newMat.b>0.f){
+        //Just render color as is
+        FragColor = vec4(diffuseColor.r,diffuseColor.g,diffuseColor.b, 1.0);
+        return;;
+    }
 
     vec3 normalMap=normalize(vec3(texture(gNormal, TexCoords)));
     vec3 positionMap=vec3(texture(gPosition, TexCoords));
