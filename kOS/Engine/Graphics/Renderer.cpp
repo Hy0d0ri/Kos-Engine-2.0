@@ -388,9 +388,18 @@ void SpriteRenderer::RenderScreenSprites(const CameraData& camera, Shader& shade
 	}
 }
 
+void SpriteRenderer::RenderWorldSprites(const CameraData& camera, Shader& shader) {
+	for (const ScreenSpriteData& screenSprite : worldSpriteToDraw)
+	{
+		screenSpriteMesh.DrawMeshWorld(screenSprite, shader, camera);
+	}
+
+}
+
 void SpriteRenderer::Clear()
 {
 	screenSpritesToDraw.clear();
+	worldSpriteToDraw.clear();
 }
 
 void LightRenderer::Clear()
@@ -608,6 +617,7 @@ void ParticleRenderer::Render(const CameraData& camera, Shader& shader)
 		particlesToDraw.clear();
 	}
 	shader.Use();
+	shader.SetFloat("uShaderType", 2.1f);
 	shader.SetTrans("projection", camera.GetPerspMtx());
 	shader.SetTrans("view", camera.GetViewMtx());
 	if (!instancedBasicParticles.empty())
@@ -649,6 +659,7 @@ void ParticleRenderer::Render(const CameraData& camera, Shader& shader)
 			std::cout << "after 3 OpenGL Error: " << err << std::endl;
 		}
 	}
+	shader.Disuse();
 		
 }
 
